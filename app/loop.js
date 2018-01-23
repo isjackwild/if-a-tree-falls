@@ -29,10 +29,14 @@ const setupRenderer = () => {
 		canvas,
 		antialias: true,
 	});
-	renderer.shadowMap.enabled = true;
-	renderer.shadowMap.soft = true;
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-	renderer.setClearColor(0xffffff);
+
+	if (window.location.search.indexOf('no-shadow') > -1) {
+		renderer.shadowMap.enabled = false;
+	} else {
+		renderer.shadowMap.enabled = true;
+		renderer.shadowMap.soft = true;
+	}
+	renderer.setClearColor(0x0760ef);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 };
