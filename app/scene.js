@@ -18,7 +18,7 @@ export const init = () => {
 	if (window.location.search.indexOf('no-fog') > -1) {
 		scene.fog = null;
 	} else {
-		scene.fog = new THREE.Fog(0x0760ef, 5000, 7500);
+		scene.fog = new THREE.Fog(0x0760ef, 500, 10000);
 	}
 	scene.add(camera);
 	scene.add( new THREE.AmbientLight( 0xffffff, 0.85 ) );

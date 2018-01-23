@@ -3,7 +3,6 @@ import { BIRD_SETTINGS as SETTINGS } from './CONSTANTS';
 import { convertToRange } from './lib/maths';
 
 const Bird = (initPos = new THREE.Vector3()) => {
-	console.log(initPos);
 	const pos = new THREE.Vector3().copy(initPos);
 	const vel = new THREE.Vector3();
 	const acc = new THREE.Vector3();

@@ -8,7 +8,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 	// TODO. make tree it's own file, like Bird
 	const createGeometry = ({ halfHeight, height, segHeight, segCount }) => {
 		// radTop, radBottom, height, radSegs, heightSegs, openEnded
-		const geometry = new THREE.CylinderGeometry(60, 15, height, 8, segCount * 3, true);
+		const geometry = new THREE.CylinderGeometry(15, 60, height, 8, segCount * 3, true);
 
 		geometry.vertices.forEach(v => {
 			const y = v.y + halfHeight;
@@ -44,7 +44,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		const material = new THREE.MeshPhongMaterial({
 			skinning: true,
 			// color: 0xff0000,
-			color: 0xe8694c,
+			color: 0xf00030,
 			flatShading: true,
 			wireframe: false,
 			fog: true,
@@ -55,9 +55,21 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		const skeleton = new THREE.Skeleton(bones);
 		mesh.castShadow = true;
 
+		const materialLeaves = new THREE.MeshPhongMaterial({
+			color: 0x00d161,
+			castShadow: true,
+		});
+		const geometryLeaves = new THREE.SphereGeometry(2000, 32, 32);
+		const leaves = new THREE.Mesh(geometryLeaves, materialLeaves);
+
+		bones[bones.length - 1].add(leaves);
+		// mesh.add(leaves);
+		console.log(leaves);
+		// leaves.add(bones[bones.length - 1]);
+		// mes.
+
 		mesh.add(bones[0]);
 		mesh.bind(skeleton);
-		console.log(bones);
 		const skeletonHelper = new THREE.SkeletonHelper(mesh);
 		skeletonHelper.material.linewidth = 2;
 
@@ -70,8 +82,8 @@ const Tree = (initPos = new THREE.Vector3()) => {
 			let nx = noise.simplex2(100, timeX);
 			let nz = noise.simplex2(0, timeZ);
 
-			nx *= Easing.Exponential.EaseIn(Math.abs(nx));
-			nz *= Easing.Exponential.EaseIn(Math.abs(nz));
+			nx *= Easing.Cubic.EaseIn(Math.abs(nx));
+			nz *= Easing.Cubic.EaseIn(Math.abs(nz));
 
 			b.rotation.x = nx * WIND_STRENGTH * multi;
 			b.rotation.z = nz * WIND_STRENGTH * multi;
