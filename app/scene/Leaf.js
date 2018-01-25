@@ -18,12 +18,12 @@ const Leaf = (initPos = new THREE.Vector3()) => {
 
 	const createMesh = (geometry) => {
 		const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+		material.side = THREE.DoubleSide;
+		material.fog = true;
 		const mesh = new THREE.Mesh( geometry, material );
-		mesh.side = THREE.DoubleSide;
 		mesh.position.copy(pos);
 		mesh.castShadow = true;
 		mesh.receiveShadow = false;
-		mesh.fog = true;
 
 		return mesh;
 	};

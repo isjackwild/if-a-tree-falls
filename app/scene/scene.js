@@ -2,13 +2,16 @@ const THREE = require('three');
 import { Noise } from 'noisejs';
 export let scene, boxMesh;
 import { camera } from '../camera';
-import { lookup as lookupFlowField } from '../flow-field.js';
+import { convertToRange } from '../lib/maths';
+import Easing from '../lib/easing-functions';
+import { lookup as lookupFlowField } from '../flow-field';
 import Bird from './Bird';
 import Tree from './Tree';
 import Leaf from './Leaf';
 import {
 	TREE_SEGS,
 	TREE_SEG_HEIGHT,
+	TREE_LEAVES_RADIUS,
 	BIRD_COUNT,
 	BIRD_SETTINGS,
 	BIRD_TREE_DIST,
@@ -87,14 +90,29 @@ export const update = (correction) => {
 	const timeZ = now * WIND_Z_SPEED;
 	const angle = now * BIRD_CIRCLE_SPEED;
 	const height = now * BIRD_DIVE_SPEED;
+	
+	let nx = noise.simplex2(100, timeX);
+	let nz = noise.simplex2(0, timeZ);
 
-	if (Math.random() > 0.93) {
-		const leaf = Leaf({x: Math.random() * 1500, y: TREE_SEGS * TREE_SEG_HEIGHT, z: Math.random() * 1500});
+	nx *= Easing.Cubic.EaseIn(Math.abs(nx));
+	nz *= Easing.Cubic.EaseIn(Math.abs(nz));
+	// console.log(nx, 2);
+
+	const windStrength = Math.abs(nx + nz) * 0.5;
+	const fallChance = convertToRange(windStrength, [0, 0.66], [0.99, 0.66]);
+	console.log(fallChance);
+	if (Math.random() > fallChance) {
+		const rand = (Math.random() * 2) - 1;
+		tmpV
+			.setFromMatrixPosition(tree.bones[tree.bones.length - 1].matrixWorld)
+			.add({ x: rand * TREE_LEAVES_RADIUS,  y: 0, z: rand * TREE_LEAVES_RADIUS });
+		const leaf = Leaf(tmpV);
 		scene.add(leaf.mesh);
 		leaves.push(leaf);
 	}
 
-	tree.update(timeX, timeZ, noise);
+
+	tree.update(nx, nz, noise);
 
 	// tmpV.
 	tmpV.set(BIRD_TREE_DIST, 0, 0)
@@ -115,7 +133,10 @@ export const update = (correction) => {
 		l.applyForce(GRAVITY);
 		l.applyForce(lookupFlowField(l.pos).multiplyScalar(20));
 		l.update(correction);
-		if (l.isDead) leaves.slice(-1);
+		if (l.isDead) {
+			leaves.slice(-1);
+			scene.remove(l.mesh);
+		}
 	}
 
 	birds.forEach(b => b.applyBehaviors(birdTarget, birds));

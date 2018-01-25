@@ -1,7 +1,7 @@
 const THREE = require('three');
 import { TREE_SEGS, TREE_SEG_HEIGHT, WIND_STRENGTH } from '../CONSTANTS';
 import { convertToRange } from '../lib/maths';
-import Easing from '../lib/easing-functions';
+
 
 const Tree = (initPos = new THREE.Vector3()) => {
 	let mesh, bones;
@@ -55,10 +55,10 @@ const Tree = (initPos = new THREE.Vector3()) => {
 
 		const materialLeaves = new THREE.MeshPhongMaterial({
 			color: 0x00d161,
-			castShadow: true,
 		});
 		const geometryLeaves = new THREE.SphereGeometry(2000, 32, 32);
 		const leaves = new THREE.Mesh(geometryLeaves, materialLeaves);
+		leaves.castShadow = true;
 
 		bones[bones.length - 1].add(leaves);
 		// mesh.add(leaves);
@@ -74,14 +74,9 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		return mesh;
 	};
 
-	const update = (timeX, timeZ, noise) => {
+	const update = (nx, nz, noise) => {
 		bones.forEach((b, i) => {
 			const multi = convertToRange(i, [0, bones.length], [1, 0.25]);
-			let nx = noise.simplex2(100, timeX);
-			let nz = noise.simplex2(0, timeZ);
-
-			nx *= Easing.Cubic.EaseIn(Math.abs(nx));
-			nz *= Easing.Cubic.EaseIn(Math.abs(nz));
 
 			b.rotation.x = nx * WIND_STRENGTH * multi;
 			b.rotation.z = nz * WIND_STRENGTH * multi;

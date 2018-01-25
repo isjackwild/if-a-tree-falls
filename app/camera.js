@@ -1,5 +1,5 @@
 const THREE = require('three');
-import { TREE_SEG_HEIGHT, TREE_SEGS } from './CONSTANTS'
+import { TREE_SEG_HEIGHT, TREE_SEGS } from './CONSTANTS';
 
 export let camera;
 
@@ -13,6 +13,9 @@ export const init = () => {
 	} else if (window.location.search.indexOf('view=bottom-up') > -1) {
 		camera.position.set(0, 80, 360);
 		camera.lookAt(0, 100, 0);
+	} else if (window.location.search.indexOf('view=middle') > -1) {
+		camera.position.set(0, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, TREE_SEG_HEIGHT * TREE_SEGS * 0.5);
+		camera.lookAt(0, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 0);
 	} else {
 		camera.position.set(0, 200, 444);
 		camera.lookAt(0, 160, 0);
