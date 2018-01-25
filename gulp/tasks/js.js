@@ -9,6 +9,7 @@ const envify = require('envify');
 const JS_SRC_FILE = '../app/client.js';
 const JS_SRC_FILES = [
 	'../app/*.js',
+	'../app/**/*.js',
 ];
 const JS_BUILD_FOLDER = '../build/assets/js';
 
