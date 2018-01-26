@@ -8,6 +8,8 @@ import { lookup as lookupFlowField } from '../flow-field';
 import Bird from './Bird';
 import Tree from './Tree';
 import Leaf from './Leaf';
+import Skybox from './Skybox';
+
 import {
 	TREE_SEGS,
 	TREE_SEG_HEIGHT,
@@ -23,12 +25,12 @@ import {
 	GRAVITY,
 } from '../CONSTANTS';
 
+export let windStrength = 1;
 let noise;
 const tmpV = new THREE.Vector3(), meshGlobal = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
 const birdTarget = new THREE.Vector3(0, TREE_SEGS * TREE_SEG_HEIGHT * 0.1, 0);
-const birds = [];
-const leaves = [];
-let tree;
+const birds = [], leaves = [];
+let tree, skybox;
 let targetHelper;
 let testBird;
 
@@ -37,7 +39,7 @@ export const init = () => {
 	if (window.location.search.indexOf('no-fog') > -1) {
 		scene.fog = null;
 	} else {
-		scene.fog = new THREE.Fog(0x0760ef, 800, 15000);
+		scene.fog = new THREE.Fog(0x004cff, 800, 15000);
 	}
 	scene.add(camera);
 	scene.add( new THREE.AmbientLight( 0xffffff, 0.85 ) );
@@ -50,8 +52,8 @@ export const init = () => {
 
 	noise = new Noise(Math.random());
 
-	const floorGeometry = new THREE.PlaneGeometry(20000, 20000, 20000);
-	const floorMaterial = new THREE.MeshLambertMaterial({ color: 0xcccccc, wireframe: false });
+	const floorGeometry = new THREE.PlaneBufferGeometry(10000, 10000, 10000);
+	const floorMaterial = new THREE.MeshLambertMaterial({ color: 0x65c6b8, wireframe: false });
 	const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.receiveShadow = true;
 	floor.rotation.x = Math.PI * -0.5;
@@ -80,6 +82,9 @@ export const init = () => {
 	tree = Tree();
 	scene.add(tree.mesh);
 
+	skybox = Skybox();
+	scene.add(skybox.mesh);
+
 	meshGlobal.setFromMatrixPosition(scene.matrixWorld);
 	console.time('fall');
 };
@@ -90,17 +95,19 @@ export const update = (correction) => {
 	const timeZ = now * WIND_Z_SPEED;
 	const angle = now * BIRD_CIRCLE_SPEED;
 	const height = now * BIRD_DIVE_SPEED;
-	
+
 	let nx = noise.simplex2(100, timeX);
 	let nz = noise.simplex2(0, timeZ);
 
-	nx *= Easing.Cubic.EaseIn(Math.abs(nx));
-	nz *= Easing.Cubic.EaseIn(Math.abs(nz));
+	// nx = 1;
+	// nz = 1;
+
+	nx *= Easing.Sinusoidal.EaseIn(Math.abs(nx));
+	nz *= Easing.Sinusoidal.EaseIn(Math.abs(nz));
 	// console.log(nx, 2);
 
-	const windStrength = Math.abs(nx + nz) * 0.5;
-	const fallChance = convertToRange(windStrength, [0, 0.66], [0.99, 0.66]);
-	console.log(fallChance);
+	windStrength = Math.abs(nx + nz) * 0.5;
+	const fallChance = convertToRange(windStrength, [0, 1], [0.993, 0.8]);
 	if (Math.random() > fallChance) {
 		const rand = (Math.random() * 2) - 1;
 		tmpV
@@ -114,7 +121,6 @@ export const update = (correction) => {
 
 	tree.update(nx, nz, noise);
 
-	// tmpV.
 	tmpV.set(BIRD_TREE_DIST, 0, 0)
 		.applyAxisAngle(up, angle);
 	birdTarget
@@ -124,7 +130,6 @@ export const update = (correction) => {
 		.sub({ x: 0, y: Math.sin(height) * BIRD_HEIGHT_VARIATION, z: 0 });
 	if (targetHelper) targetHelper.position.copy(birdTarget);
 
-	// birds.forEach(b => b.applyForce(birdTarget, birds));
 	birds.forEach(b => b.applyBehaviors(birdTarget, birds));
 	birds.forEach(b => b.update(correction));
 
@@ -138,9 +143,5 @@ export const update = (correction) => {
 			scene.remove(l.mesh);
 		}
 	}
-
-	birds.forEach(b => b.applyBehaviors(birdTarget, birds));
-	birds.forEach(b => b.update(correction));
-	// testBird.update(correction);
 };
 

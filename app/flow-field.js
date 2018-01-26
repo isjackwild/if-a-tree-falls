@@ -17,9 +17,9 @@ const origin = new THREE.Vector3();
 export const lookup = ({ x, y, z }) => {
 	const phi = (noisePhi.perlin3(x * FF_NOISE_SCALE * 0.33 + noiseTime, y * FF_NOISE_SCALE + noiseTime, z * FF_NOISE_SCALE + noiseTime) + 1 / 2) * Math.PI;
 	const theta = (noiseTheta.perlin3(x * FF_NOISE_SCALE * 0.33 + noiseTime, y * FF_NOISE_SCALE + noiseTime, z * FF_NOISE_SCALE + noiseTime) + 1 / 2) * Math.PI * 2;
-	const mag = (noiseMag.perlin3(x * FF_NOISE_SCALE * 0.33 + noiseTime, y * FF_NOISE_SCALE + noiseTime, z * FF_NOISE_SCALE + noiseTime) + 1) / 2;
+	// const mag = (noiseMag.perlin3(x * FF_NOISE_SCALE * 0.33 + noiseTime, y * FF_NOISE_SCALE + noiseTime, z * FF_NOISE_SCALE + noiseTime) + 1) / 2;
 	spherical.set(1, phi, theta).makeSafe();
-	tmp.setFromSpherical(spherical).normalize().multiplyScalar(mag);
+	tmp.setFromSpherical(spherical).normalize();
 	return tmp;
 };
 

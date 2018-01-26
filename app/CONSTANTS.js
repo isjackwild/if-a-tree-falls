@@ -1,7 +1,7 @@
 export const TREE_SEGS = 50;
 export const TREE_SEG_HEIGHT = 200;
 export const TREE_LEAVES_RADIUS = 2000;
-export const WIND_STRENGTH = 0.08;
+export const WIND_STRENGTH = 0.05;
 
 export const BIRD_TREE_DIST = 2000;
 export const BIRD_COUNT = 12;
@@ -28,4 +28,4 @@ export const FF_RESOLUTION = 1500;
 export const FF_NOISE_SCALE = 0.0003;
 export const FF_NOISE_SPEED = 0.0015;
 
-export const GRAVITY = { x: 0, y: -10, z: 0 };
+export const GRAVITY = { x: 0, y: -20, z: 0 };

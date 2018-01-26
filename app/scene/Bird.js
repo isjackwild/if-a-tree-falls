@@ -38,7 +38,7 @@ const Bird = (initPos = new THREE.Vector3()) => {
 	};
 
 	const createMesh = (geometry) => {
-		const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+		const material = new THREE.MeshBasicMaterial({ color: 0x1a1e30 });
 		const mesh = new THREE.Mesh( geometry, material );
 		mesh.position.copy(pos);
 		mesh.castShadow = true;
@@ -128,7 +128,7 @@ const Bird = (initPos = new THREE.Vector3()) => {
 	const update = (correction) => {
 		acc.multiplyScalar(correction);
 		vel.add(acc);
-		vel.clampLength(0, SETTINGS.maxVel);
+		vel.clampLength(0, (SETTINGS.maxVel * correction));
 
 		mesh.position.copy(pos);
 		mesh.lookAt(tmp.copy(pos).add(tmp2.copy(vel).normalize()));

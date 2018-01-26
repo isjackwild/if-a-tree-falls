@@ -7,7 +7,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 	let mesh, bones;
 	const createGeometry = ({ halfHeight, height, segHeight, segCount }) => {
 		// radTop, radBottom, height, radSegs, heightSegs, openEnded
-		const geometry = new THREE.CylinderGeometry(15, 60, height, 8, segCount * 3, true);
+		const geometry = new THREE.CylinderGeometry(15, 60, height, 8, segCount, true);
 
 		geometry.vertices.forEach(v => {
 			const y = v.y + halfHeight;
@@ -43,10 +43,10 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		const material = new THREE.MeshPhongMaterial({
 			skinning: true,
 			// color: 0xff0000,
-			color: 0xf00030,
-			wireframe: false,
+			color: 0xb51b44,
+			// wireframe: true,
 			fog: true,
-			side: THREE.DoubleSide,
+			// side: THREE.DoubleSide,
 		});
 
 		const mesh = new THREE.SkinnedMesh(geometry, material);
@@ -54,9 +54,9 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		mesh.castShadow = true;
 
 		const materialLeaves = new THREE.MeshPhongMaterial({
-			color: 0x00d161,
+			color: 0x65c6b8,
 		});
-		const geometryLeaves = new THREE.SphereGeometry(2000, 32, 32);
+		const geometryLeaves = new THREE.SphereBufferGeometry(2000, 32, 32);
 		const leaves = new THREE.Mesh(geometryLeaves, materialLeaves);
 		leaves.castShadow = true;
 

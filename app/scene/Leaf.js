@@ -17,7 +17,7 @@ const Leaf = (initPos = new THREE.Vector3()) => {
 	};
 
 	const createMesh = (geometry) => {
-		const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+		const material = new THREE.MeshBasicMaterial({ color: 0x65c6b8 });
 		material.side = THREE.DoubleSide;
 		material.fog = true;
 		const mesh = new THREE.Mesh( geometry, material );
@@ -33,12 +33,9 @@ const Leaf = (initPos = new THREE.Vector3()) => {
 	};
 
 	const update = (correction) => {
-		if (isDead) return;
-
-
 		acc.multiplyScalar(correction);
 		vel.add(acc);
-		vel.clampLength(0, SETTINGS.maxVel);
+		vel.clampLength(0, SETTINGS.maxVel * correction);
 
 		mesh.position.copy(pos);
 		mesh.lookAt(tmp.copy(pos).add(tmp2.copy(vel).normalize()));
