@@ -13,7 +13,7 @@ const Leaf = (initPos = new THREE.Vector3()) => {
 	let isDead = false;
 
 	const createGeometry = () => {
-		return new THREE.PlaneGeometry(100, 100);
+		return new THREE.PlaneGeometry(100, 100, 1, 1);
 	};
 
 	const createMesh = (geometry) => {

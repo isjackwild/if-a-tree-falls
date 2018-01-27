@@ -35,28 +35,45 @@ let targetHelper;
 let testBird;
 
 export const init = () => {
+	noise = new Noise(Math.random());
 	scene = new THREE.Scene();
+
 	if (window.location.search.indexOf('no-fog') > -1) {
 		scene.fog = null;
 	} else {
 		scene.fog = new THREE.Fog(0x004cff, 800, 15000);
 	}
 	scene.add(camera);
-	scene.add( new THREE.AmbientLight( 0xffffff, 0.85 ) );
-	const sun = new THREE.DirectionalLight( 0xffffff, 0.15 );
-	sun.position.set(0, TREE_SEGS * TREE_SEG_HEIGHT * 1.25, 0);
+	scene.add( new THREE.AmbientLight( 0xffffff, 0.8 ) );
+	const sun = new THREE.DirectionalLight( 0xffffff, 0.4 );
+	sun.position.set(7000, TREE_SEGS * TREE_SEG_HEIGHT * 1.25, 0);
 	sun.castShadow = true;
 	sun.shadow.camera = new THREE.PerspectiveCamera();
 	sun.shadow.camera.far = 15000;
 	scene.add(sun);
+	scene.add(new THREE.DirectionalLightHelper(sun));
 
-	noise = new Noise(Math.random());
+	// const sideLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+	// sideLight.position.set(-1000, 500, -500);
+	// sideLight.castShadow = true;
+	// sideLight.shadow.camera = new THREE.PerspectiveCamera();
+	// sideLight.shadow.camera.far = 15000;
+	// scene.add(sideLight);
+	// scene.add(new THREE.DirectionalLightHelper(sideLight));
 
-	const floorGeometry = new THREE.PlaneBufferGeometry(10000, 10000, 10000);
+	const floorGeometry = new THREE.PlaneGeometry(10000, 10000, 32, 32);
+	floorGeometry.rotateX(Math.PI * -0.5);
+	floorGeometry.vertices.forEach(v => {
+		v.y += noise.simplex2(v.x, v.z) * 100;
+	});
+	floorGeometry.normalsNeedUpdate = true;
+	floorGeometry.verticesNeedUpdate = true;
+	floorGeometry.computeFaceNormals();
+	floorGeometry.computeVertexNormals();
 	const floorMaterial = new THREE.MeshLambertMaterial({ color: 0x65c6b8, wireframe: false });
 	const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.receiveShadow = true;
-	floor.rotation.x = Math.PI * -0.5;
+	floor.castShadow = true;
 	scene.add(floor);
 
 	scene.add(new THREE.AxesHelper(160));
