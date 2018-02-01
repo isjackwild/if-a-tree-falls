@@ -8,6 +8,7 @@ import { lookup as lookupFlowField } from '../flow-field';
 import Bird from './Bird';
 import Tree from './Tree';
 import Leaf from './Leaf';
+import Leaves from './Leaves';
 import Skybox from './Skybox';
 
 import {
@@ -30,7 +31,7 @@ let noise;
 const tmpV = new THREE.Vector3(), meshGlobal = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
 const birdTarget = new THREE.Vector3(0, TREE_SEGS * TREE_SEG_HEIGHT * 0.1, 0);
 const birds = [], leaves = [];
-let tree, skybox;
+let tree, skybox, leavesInstanced;
 let targetHelper;
 let testBird;
 
@@ -41,7 +42,7 @@ export const init = () => {
 	if (window.location.search.indexOf('no-fog') > -1) {
 		scene.fog = null;
 	} else {
-		scene.fog = new THREE.Fog(0x004cff, 800, 15000);
+		scene.fog = new THREE.Fog(0xc2cebf, 0, 13000);
 	}
 	scene.add(camera);
 	scene.add( new THREE.AmbientLight( 0xffffff, 0.8 ) );
@@ -51,32 +52,54 @@ export const init = () => {
 	sun.shadow.camera = new THREE.PerspectiveCamera();
 	sun.shadow.camera.far = 15000;
 	scene.add(sun);
-	scene.add(new THREE.DirectionalLightHelper(sun));
+	// scene.add(new THREE.DirectionalLightHelper(sun));
 
-	// const sideLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
-	// sideLight.position.set(-1000, 500, -500);
-	// sideLight.castShadow = true;
-	// sideLight.shadow.camera = new THREE.PerspectiveCamera();
-	// sideLight.shadow.camera.far = 15000;
+	// const sideLight = new THREE.DirectionalLight( 0xffffff, 0.2 );
+	// sideLight.position.set(30000, 300, -500);
+	// // sideLight.castShadow = true;
+	// // sideLight.shadow.camera = new THREE.PerspectiveCamera();
+	// // sideLight.shadow.camera.far = 15000;
 	// scene.add(sideLight);
 	// scene.add(new THREE.DirectionalLightHelper(sideLight));
 
-	const floorGeometry = new THREE.PlaneGeometry(10000, 10000, 32, 32);
+	const floorGeometry = new THREE.PlaneGeometry(30000, 30000, 32, 32);
 	floorGeometry.rotateX(Math.PI * -0.5);
 	floorGeometry.vertices.forEach(v => {
-		v.y += noise.simplex2(v.x, v.z) * 100;
+		const offsetSmall = noise.simplex2(v.x * 0.8, v.z * 0.8) * 60;
+		const offsetLarge = noise.simplex2(v.z * 0.05, v.x * 0.2) * 300;
+		v.y += offsetSmall + offsetLarge;
 	});
 	floorGeometry.normalsNeedUpdate = true;
 	floorGeometry.verticesNeedUpdate = true;
 	floorGeometry.computeFaceNormals();
 	floorGeometry.computeVertexNormals();
-	const floorMaterial = new THREE.MeshLambertMaterial({ color: 0x65c6b8, wireframe: false });
+
+	const texture = new THREE.TextureLoader().load('assets/maps/texture-grass-56526-xxl.jpg');
+	texture.wrapS = THREE.RepeatWrapping;
+	texture.wrapT = THREE.RepeatWrapping;
+	texture.repeat.set(100, 100);
+
+	const textureBump = new THREE.TextureLoader().load('assets/maps/texture-grass-56526-xxl.jpg');
+	textureBump.wrapS = THREE.RepeatWrapping;
+	textureBump.wrapT = THREE.RepeatWrapping;
+	textureBump.repeat.set(100, 100);
+	const floorMaterial = new THREE.MeshStandardMaterial({
+		color: 0x33c69f,
+		wireframe: false,
+		// map: texture,
+		// bumpMap: texture,
+		bumpScale: 1,
+		metalness: 0,
+		roughness: 0.5,
+		fog: new THREE.Fog(0xff0000, 0, 8888),
+		// normalMap: texture,
+	});
 	const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 	floor.receiveShadow = true;
 	floor.castShadow = true;
 	scene.add(floor);
 
-	scene.add(new THREE.AxesHelper(160));
+	// scene.add(new THREE.AxesHelper(160));
 
 	if (window.location.search.indexOf('debug') > -1) {
 		targetHelper = new THREE.AxesHelper(200);
@@ -95,6 +118,10 @@ export const init = () => {
 
 	// testBird = Bird(new THREE.Vector3(0, 222, 111));
 	// scene.add(testBird.mesh);
+	
+	leavesInstanced = Leaves();
+	// leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
+	scene.add(leavesInstanced.mesh);
 
 	tree = Tree();
 	scene.add(tree.mesh);
@@ -124,19 +151,20 @@ export const update = (correction) => {
 	// console.log(nx, 2);
 
 	windStrength = Math.abs(nx + nz) * 0.5;
-	const fallChance = convertToRange(windStrength, [0, 1], [0.993, 0.8]);
-	if (Math.random() > fallChance) {
-		const rand = (Math.random() * 2) - 1;
-		tmpV
-			.setFromMatrixPosition(tree.bones[tree.bones.length - 1].matrixWorld)
-			.add({ x: rand * TREE_LEAVES_RADIUS,  y: 0, z: rand * TREE_LEAVES_RADIUS });
-		const leaf = Leaf(tmpV);
-		scene.add(leaf.mesh);
-		leaves.push(leaf);
-	}
+	// const fallChance = convertToRange(windStrength, [0, 1], [0.993, 0.8]);
+	// if (Math.random() > fallChance) {
+	// 	const rand = (Math.random() * 2) - 1;
+	// 	tmpV
+	// 		.setFromMatrixPosition(tree.bones[tree.bones.length - 1].matrixWorld)
+	// 		.add({ x: rand * TREE_LEAVES_RADIUS,  y: 0, z: rand * TREE_LEAVES_RADIUS });
+	// 	const leaf = Leaf(tmpV);
+	// 	scene.add(leaf.mesh);
+	// 	leaves.push(leaf);
+	// }
 
 
 	tree.update(nx, nz, noise);
+	leavesInstanced.update();
 
 	tmpV.set(BIRD_TREE_DIST, 0, 0)
 		.applyAxisAngle(up, angle);

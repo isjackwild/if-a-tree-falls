@@ -40,12 +40,14 @@ const Tree = (initPos = new THREE.Vector3()) => {
 	};
 
 	const createMesh = (geometry, bones) => {
-		const material = new THREE.MeshPhongMaterial({
+		const material = new THREE.MeshStandardMaterial({
 			skinning: true,
 			// color: 0xff0000,
-			color: 0xb51b44,
+			color: 0xcc9255,
+			metalness: 0,
+			roughness: 0.8,
 			// wireframe: true,
-			fog: true,
+			// fog: false,
 			// side: THREE.DoubleSide,
 		});
 
@@ -53,8 +55,11 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		const skeleton = new THREE.Skeleton(bones);
 		mesh.castShadow = true;
 
-		const materialLeaves = new THREE.MeshPhongMaterial({
-			color: 0x65c6b8,
+		const materialLeaves = new THREE.MeshStandardMaterial({
+			color: 0x3db230,
+			metalness: 0,
+			roughness: 0.8,
+			// fog: false,
 		});
 		const geometryLeaves = new THREE.SphereBufferGeometry(2000, 32, 32);
 		const leaves = new THREE.Mesh(geometryLeaves, materialLeaves);

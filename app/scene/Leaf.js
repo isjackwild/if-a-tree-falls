@@ -17,7 +17,7 @@ const Leaf = (initPos = new THREE.Vector3()) => {
 	};
 
 	const createMesh = (geometry) => {
-		const material = new THREE.MeshBasicMaterial({ color: 0x65c6b8 });
+		const material = new THREE.MeshStandardMaterial({ color: 0x3db230 });
 		material.side = THREE.DoubleSide;
 		material.fog = true;
 		const mesh = new THREE.Mesh( geometry, material );
