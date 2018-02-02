@@ -10,6 +10,7 @@ import Tree from './Tree';
 import Leaf from './Leaf';
 import Leaves from './Leaves';
 import Skybox from './Skybox';
+import Landscape from './Landscape';
 
 import {
 	TREE_SEGS,
@@ -31,7 +32,7 @@ let noise;
 const tmpV = new THREE.Vector3(), meshGlobal = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
 const birdTarget = new THREE.Vector3(0, TREE_SEGS * TREE_SEG_HEIGHT * 0.1, 0);
 const birds = [], leaves = [];
-let tree, skybox, leavesInstanced;
+let tree, skybox, leavesInstanced, landscape;
 let targetHelper;
 let testBird;
 
@@ -62,44 +63,48 @@ export const init = () => {
 	// scene.add(sideLight);
 	// scene.add(new THREE.DirectionalLightHelper(sideLight));
 
-	const floorGeometry = new THREE.PlaneGeometry(30000, 30000, 32, 32);
-	floorGeometry.rotateX(Math.PI * -0.5);
-	floorGeometry.vertices.forEach(v => {
-		const offsetSmall = noise.simplex2(v.x * 0.8, v.z * 0.8) * 60;
-		const offsetLarge = noise.simplex2(v.z * 0.05, v.x * 0.2) * 300;
-		v.y += offsetSmall + offsetLarge;
-	});
-	floorGeometry.normalsNeedUpdate = true;
-	floorGeometry.verticesNeedUpdate = true;
-	floorGeometry.computeFaceNormals();
-	floorGeometry.computeVertexNormals();
+	// const floorTmpGeometry = new THREE.PlaneGeometry(30000, 30000, 32, 32);
+	// floorTmpGeometry.rotateX(Math.PI * -0.5);
+	// floorTmpGeometry.vertices.forEach(v => {
+	// 	const offsetSmall = noise.simplex2(v.x * 0.8, v.z * 0.8) * 60;
+	// 	const offsetLarge = noise.simplex2(v.z * 0.05, v.x * 0.2) * 300;
+	// 	v.y += offsetSmall + offsetLarge;
+	// });
+	// floorTmpGeometry.normalsNeedUpdate = true;
+	// floorTmpGeometry.verticesNeedUpdate = true;
+	// floorTmpGeometry.computeFaceNormals();
+	// floorTmpGeometry.computeVertexNormals();
+	// const floorGeometry = new THREE.BufferGeometry().fromGeometry(floorTmpGeometry);
 
-	const texture = new THREE.TextureLoader().load('assets/maps/texture-grass-56526-xxl.jpg');
-	texture.wrapS = THREE.RepeatWrapping;
-	texture.wrapT = THREE.RepeatWrapping;
-	texture.repeat.set(100, 100);
+	// const texture = new THREE.TextureLoader().load('assets/maps/texture-grass-56526-xxl.jpg');
+	// texture.wrapS = THREE.RepeatWrapping;
+	// texture.wrapT = THREE.RepeatWrapping;
+	// texture.repeat.set(100, 100);
 
-	const textureBump = new THREE.TextureLoader().load('assets/maps/texture-grass-56526-xxl.jpg');
-	textureBump.wrapS = THREE.RepeatWrapping;
-	textureBump.wrapT = THREE.RepeatWrapping;
-	textureBump.repeat.set(100, 100);
-	const floorMaterial = new THREE.MeshStandardMaterial({
-		color: 0x33c69f,
-		wireframe: false,
-		// map: texture,
-		// bumpMap: texture,
-		bumpScale: 1,
-		metalness: 0,
-		roughness: 0.5,
-		fog: new THREE.Fog(0xff0000, 0, 8888),
-		// normalMap: texture,
-	});
-	const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-	floor.receiveShadow = true;
-	floor.castShadow = true;
-	scene.add(floor);
+	// const textureBump = new THREE.TextureLoader().load('assets/maps/texture-grass-56526-xxl.jpg');
+	// textureBump.wrapS = THREE.RepeatWrapping;
+	// textureBump.wrapT = THREE.RepeatWrapping;
+	// textureBump.repeat.set(100, 100);
+	// const floorMaterial = new THREE.MeshStandardMaterial({
+	// 	color: 0x33c69f,
+	// 	wireframe: false,
+	// 	// map: texture,
+	// 	// bumpMap: texture,
+	// 	bumpScale: 1,
+	// 	metalness: 0,
+	// 	roughness: 0.5,
+	// 	fog: new THREE.Fog(0xff0000, 0, 8888),
+	// 	// normalMap: texture,
+	// });
+	// const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+	// floor.receiveShadow = true;
+	// floor.castShadow = true;
+	// scene.add(floor);
 
 	// scene.add(new THREE.AxesHelper(160));
+	// 
+	landscape = Landscape();
+	scene.add(landscape.mesh);
 
 	if (window.location.search.indexOf('debug') > -1) {
 		targetHelper = new THREE.AxesHelper(200);
@@ -115,12 +120,9 @@ export const init = () => {
 		birds.push(bird);
 		scene.add(bird.mesh);
 	}
-
-	// testBird = Bird(new THREE.Vector3(0, 222, 111));
-	// scene.add(testBird.mesh);
 	
 	leavesInstanced = Leaves();
-	// leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
+	// leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.1;
 	scene.add(leavesInstanced.mesh);
 
 	tree = Tree();
@@ -164,7 +166,7 @@ export const update = (correction) => {
 
 
 	tree.update(nx, nz, noise);
-	leavesInstanced.update();
+	leavesInstanced.update(correction);
 
 	tmpV.set(BIRD_TREE_DIST, 0, 0)
 		.applyAxisAngle(up, angle);

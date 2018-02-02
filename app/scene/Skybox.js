@@ -4,7 +4,7 @@ const Skybox = () => {
 	const uniforms = {
       color1: {
         type: "c",
-        value: new THREE.Color(0xc2cebf), //light blue
+        value: new THREE.Color(0xe0e2d7), //light blue
       },
       color2: {
         type: "c",
@@ -34,7 +34,7 @@ const Skybox = () => {
 	`;
 
 	const mesh = new THREE.Mesh(
-		new THREE.SphereGeometry(15000, 36, 36),
+		new THREE.SphereBufferGeometry(15000, 36, 36),
 		new THREE.ShaderMaterial({
 			side: THREE.DoubleSide,
 			uniforms,

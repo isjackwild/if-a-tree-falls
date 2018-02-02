@@ -43,7 +43,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		const material = new THREE.MeshStandardMaterial({
 			skinning: true,
 			// color: 0xff0000,
-			color: 0xcc9255,
+			color: 0x9f877b,
 			metalness: 0,
 			roughness: 0.8,
 			// wireframe: true,
@@ -56,7 +56,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		mesh.castShadow = true;
 
 		const materialLeaves = new THREE.MeshStandardMaterial({
-			color: 0x3db230,
+			color: 0x3f483a,
 			metalness: 0,
 			roughness: 0.8,
 			// fog: false,
