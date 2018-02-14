@@ -1,4 +1,4 @@
-const THREE = require('three');
+// const THREE = require('three');
 
 const Skybox = () => {
 	const uniforms = {
@@ -34,7 +34,7 @@ const Skybox = () => {
 	`;
 
 	const mesh = new THREE.Mesh(
-		new THREE.SphereBufferGeometry(15000, 36, 36),
+		new THREE.SphereBufferGeometry(25000, 36, 36),
 		new THREE.ShaderMaterial({
 			side: THREE.DoubleSide,
 			uniforms,

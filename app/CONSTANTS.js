@@ -29,3 +29,6 @@ export const FF_NOISE_SCALE = 0.0003;
 export const FF_NOISE_SPEED = 0.0015;
 
 export const GRAVITY = { x: 0, y: -20, z: 0 };
+
+
+export const TREE_LEAVES_COUNT = 1000;

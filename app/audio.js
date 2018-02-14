@@ -1,4 +1,4 @@
-const THREE = require('three');
+// const THREE = require('three');
 import { windStrength } from './scene/scene';
 import { convertToRange } from './lib/maths';
 import { Noise } from 'noisejs';

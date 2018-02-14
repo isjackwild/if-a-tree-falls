@@ -1,6 +1,6 @@
-const THREE = require('three');
-require('./vendor/OrbitControls.js');
-require('./vendor/DeviceOrientationControls.js');
+// const THREE = require('three');
+// require('./vendor/OrbitControls.js');
+// require('./vendor/DeviceOrientationControls.js');
 import { camera } from './camera.js';
 import { TREE_SEGS, TREE_SEG_HEIGHT } from './controls';
 let controls;

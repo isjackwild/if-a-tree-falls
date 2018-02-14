@@ -4,7 +4,7 @@
  * @authod arodic / http://aleksandarrodic.com/
  * @authod fonserbc / http://fonserbc.github.io/
 */
-const THREE = require('three');
+// const THREE = require('three');
 THREE.StereoEffect = function ( renderer ) {
 
 	var _stereo = new THREE.StereoCamera();

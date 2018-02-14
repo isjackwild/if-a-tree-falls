@@ -1,4 +1,4 @@
-const THREE = require('three');
+// const THREE = require('three');
 import { Noise } from 'noisejs';
 export let scene, boxMesh;
 import { camera } from '../camera';
@@ -43,7 +43,7 @@ export const init = () => {
 	if (window.location.search.indexOf('no-fog') > -1) {
 		scene.fog = null;
 	} else {
-		scene.fog = new THREE.Fog(0xc2cebf, 0, 13000);
+		scene.fog = new THREE.Fog(0x13353e, 0, 13000);
 	}
 	scene.add(camera);
 	scene.add( new THREE.AmbientLight( 0xffffff, 0.8 ) );
@@ -121,9 +121,9 @@ export const init = () => {
 		scene.add(bird.mesh);
 	}
 	
-	leavesInstanced = Leaves();
+	// leavesInstanced = Leaves();
 	// leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.1;
-	scene.add(leavesInstanced.mesh);
+	// scene.add(leavesInstanced.mesh);
 
 	tree = Tree();
 	scene.add(tree.mesh);
@@ -136,6 +136,7 @@ export const init = () => {
 };
 
 export const update = (correction) => {
+	return;
 	const now = Date.now();
 	const timeX = now * WIND_X_SPEED;
 	const timeZ = now * WIND_Z_SPEED;

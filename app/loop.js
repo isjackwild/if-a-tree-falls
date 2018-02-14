@@ -1,5 +1,5 @@
-const THREE = require('three');
-require('./vendor/StereoEffect.js');
+// const THREE = require('three');
+// require('./vendor/StereoEffect.js');
 import Stats from 'stats-js';
 import { init as initScene, scene, update as updateScene } from './scene/scene';
 import { init as initCamera, camera } from './camera';

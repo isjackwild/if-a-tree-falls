@@ -1,4 +1,4 @@
-const THREE = require('three');
+// const THREE = require('three');
 import GPGPU from '../vendor/GPGPU';
 import { renderer } from '../loop';
 

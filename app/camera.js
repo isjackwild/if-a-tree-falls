@@ -1,4 +1,4 @@
-const THREE = require('three');
+// const THREE = require('three');
 import { TREE_SEG_HEIGHT, TREE_SEGS } from './CONSTANTS';
 
 export let camera;

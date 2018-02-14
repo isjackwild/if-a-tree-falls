@@ -1,4 +1,4 @@
-const THREE = require('three');
+// const THREE = require('three');
 const dat = require('dat-gui');
 
 import { init, renderer } from './loop.js';

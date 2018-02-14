@@ -14,7 +14,7 @@
 //    Pan - right mouse, or arrow keys / touch: three finter swipe
 
 
-const THREE = require('three');
+// const THREE = require('three');
 THREE.OrbitControls = function ( object, domElement ) {
 
 	this.object = object;
