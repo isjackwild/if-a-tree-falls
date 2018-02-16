@@ -1,7 +1,7 @@
 // const THREE = require('three');
 // require('./vendor/StereoEffect.js');
 import Stats from 'stats-js';
-import { init as initScene, scene, update as updateScene } from './scene/scene';
+import { init as initScene, scene, update as updateScene, setCameraPosition } from './scene/scene';
 import { init as initCamera, camera } from './camera';
 import { init as initControls, update as updateControls } from './controls';
 import { init as initAudio, update as updateAudio } from './audio';
@@ -28,6 +28,8 @@ export const init = () => {
 	initCamera();
 	initScene();
 	initControls();
+	setCameraPosition();
+
 	currentCamera = camera;
 	currentScene = scene;
 	now = new Date().getTime();

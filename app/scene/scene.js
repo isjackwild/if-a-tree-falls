@@ -2,6 +2,7 @@
 import { Noise } from 'noisejs';
 export let scene, boxMesh;
 import { camera } from '../camera';
+import { controls } from '../controls';
 import { convertToRange } from '../lib/maths';
 import Easing from '../lib/easing-functions';
 import { lookup as lookupFlowField } from '../flow-field';
@@ -121,9 +122,9 @@ export const init = () => {
 		scene.add(bird.mesh);
 	}
 	
-	// leavesInstanced = Leaves();
-	// leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.1;
-	// scene.add(leavesInstanced.mesh);
+	leavesInstanced = Leaves();
+	leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
+	scene.add(leavesInstanced.mesh);
 
 	tree = Tree();
 	scene.add(tree.mesh);
@@ -132,11 +133,24 @@ export const init = () => {
 	scene.add(skybox.mesh);
 
 	meshGlobal.setFromMatrixPosition(scene.matrixWorld);
+
+
 	console.time('fall');
 };
 
+export const setCameraPosition = () => {
+	const raycaster = new THREE.Raycaster();
+	raycaster.set(new THREE.Vector3(0, 5000, 0), new THREE.Vector3(0, -1, 0));
+	const intersects = raycaster.intersectObject(landscape.mesh);
+
+	if (window.location.search.indexOf('view=') === -1) {
+		camera.position.y += intersects[0].point.y;
+		controls.target.y += intersects[0].point.y;
+	}
+};
+
 export const update = (correction) => {
-	return;
+	// return;
 	const now = Date.now();
 	const timeX = now * WIND_X_SPEED;
 	const timeZ = now * WIND_Z_SPEED;

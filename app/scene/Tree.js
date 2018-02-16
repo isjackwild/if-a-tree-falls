@@ -103,6 +103,42 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		return canvasTiled;
 	};
 
+	const generateLeafTexture = (width = 128, height = 512) => {
+		const noise = new Noise(Math.random());
+		let canvas, context, image, imageData;
+
+		canvas = document.createElement('canvas');
+		canvas.width = width;
+		canvas.height = height;
+
+		context = canvas.getContext('2d');
+		context.fillStyle = '#000';
+		context.fillRect(0, 0, width, height);
+
+		image = context.getImageData(0, 0, canvas.width, canvas.height);
+		imageData = image.data;
+
+		for (let i = 0, d = 0; i < width * height; i++, d += 4) {
+			const x = i % width;
+			const y = ~~ (i / height);
+
+			let n = (noise.simplex2(x * 0.06, y * 0.01) + 1) * 0.5;
+
+			imageData[d] = imageData[d + 1] = imageData[d + 2] = (n * 75) + 180;
+		}
+
+		context.putImageData(image, 0, 0);
+
+		canvas.style.top = '0';
+		canvas.style.left = '0';
+		canvas.style.width = '400px';
+		canvas.style.height = 'auto';
+		canvas.style.position = 'relative';
+		// document.body.appendChild(canvas);
+
+		return canvas;
+	};
+
 	const createMesh = (geometry, bones) => {
 		const texture = new THREE.CanvasTexture(generateTrunkTexture(128, 128));
 		texture.wrapS = THREE.RepeatWrapping;
@@ -166,15 +202,22 @@ const Tree = (initPos = new THREE.Vector3()) => {
 			varying vec3 vColor;
 			varying vec2 vUv;
 
+			uniform sampler2D tMap;
+
 			void main() {
-				gl_FragColor = vec4(mix(vColor, vec3(0.5, 0.58, 0.5), 1.0 - vUv.y), 1.0);
+				vec3 textureLookup = texture2D(tMap, vUv).rgb;
+				gl_FragColor = vec4(mix(vColor, vec3(0.5, 0.58, 0.5), 1.0 - vUv.y) * textureLookup, 1.0);
+				// gl_FragColor = vec4(textureLookup * 0.1, 1.0);
 			}
 		`;
+
+		const leafTexture = new THREE.CanvasTexture(generateLeafTexture());
 		const materialLeaves = new THREE.RawShaderMaterial({
 			vertexShader,
 			fragmentShader,
 			uniforms: {
 				color: { type: 'c', value: new THREE.Color(0xC67A5B) },
+				tMap: { type: 't', value: leafTexture },
 			},
 			side: THREE.DoubleSide,
 		});

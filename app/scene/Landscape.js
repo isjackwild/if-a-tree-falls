@@ -87,6 +87,17 @@ const Landscape = () => {
 
 
 		context.putImageData(image, 0, 0);
+
+		image = context.getImageData(0, 0, canvasScaled.width, canvasScaled.height);
+		imageData = image.data;
+
+		for (let i = 0, j = 0, l = imageData.length; i < l; i += 4, j++) {
+			const n = noise.simplex2(0, i * 10) * 7;
+			imageData[i] += n;
+			// imageData[i + 1] += n;
+			// imageData[i + 2] += n;
+		}
+		context.putImageData(image, 0, 0);
 		// document.body.appendChild(canvasScaled);
 		canvasScaled.style.top = '0';
 		canvasScaled.style.left = '0';
@@ -102,7 +113,7 @@ const Landscape = () => {
 
 		const verts = geometry.attributes.position.array;
 		for (let i = 0, j = 0, l = verts.length; i < l; i++, j += 3) {
-			verts[j + 1] = (terrain[i] - 0.5) * 1000;
+			verts[j + 1] = terrain[i] * 1000;
 		}
 
 		return geometry;

@@ -29,6 +29,7 @@ const Bird = (initPos = new THREE.Vector3()) => {
 			bevelSize: 15,
 			bevelSegments: 2,
 		});
+		geom.scale(0.7, 0.7, 0.7);
 		geom.rotateX(Math.PI * 0.5);
 		return geom;
 	};
@@ -38,7 +39,7 @@ const Bird = (initPos = new THREE.Vector3()) => {
 	};
 
 	const createMesh = (geometry) => {
-		const material = new THREE.MeshBasicMaterial({ color: 0x1a1e30 });
+		const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
 		const mesh = new THREE.Mesh( geometry, material );
 		mesh.position.copy(pos);
 		mesh.castShadow = true;

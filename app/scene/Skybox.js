@@ -21,7 +21,11 @@ const Skybox = () => {
 			float TWO_PI = 3.1416 * 2.0;
 			float stretchedUV = clamp((vUv.y * 2.8) - 1.0, 0.0, 1.0); 
 			float control = (cos(stretchedUV * TWO_PI) + 1.0) * 0.5;
-			gl_FragColor = vec4(mix(color1, color2, control), 1.0);
+
+			float x = (vUv.x + 4.0) * (vUv.y + 4.0) * 100.0;
+			vec4 grain = vec4(mod((mod(x, 13.0) + 1.0) * (mod(x, 123.0) + 1.0), 0.01) - 0.005) * 6.0;
+
+			gl_FragColor = vec4(mix(color1, color2, control) + grain.xyz, 1.0);
 		}
 	`;
 

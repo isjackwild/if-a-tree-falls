@@ -3,7 +3,7 @@
 // require('./vendor/DeviceOrientationControls.js');
 import { camera } from './camera.js';
 import { TREE_SEGS, TREE_SEG_HEIGHT } from './controls';
-let controls;
+export let controls;
 
 export const init = () => {
 	controls = new THREE.OrbitControls(camera);
@@ -13,7 +13,7 @@ export const init = () => {
 	} else if (window.location.search.indexOf('view=middle') > -1) {
 		controls.target.set(0, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 0);
 	} else {
-		controls.target.set(0, 160, 0);
+		controls.target.set(0, 200, 0);
 	}
 	window.addEventListener('deviceorientation', setOrientationControls, true);
 };
