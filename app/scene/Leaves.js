@@ -12,8 +12,8 @@ const InstancedParticles = () => {
 	const gpgpu = new GPGPU(renderer);
 
 	// const SIZE = 32;
-	const INSTANCES = 5000;
-	const PARTICLE_SIZE = 5
+	const INSTANCES = 250;
+	const PARTICLE_SIZE = 10;
 	const positions = [];
 	const offsets = [];
 	const uvs = [];
@@ -98,7 +98,7 @@ const InstancedParticles = () => {
 		float NOISE_SPEED = 0.09;
 		float MAX_VELOCITY = 10.0;
 
-		vec3 GRAVITY = vec3(0.0, -10.0, 0.0);
+		vec3 GRAVITY = vec3(0.0, -3.0, 0.0);
 
 		void main() {
 			vec3 velocity = texture2D(tPositions, vec2(vUv.x, 1.0)).xyz;
@@ -208,9 +208,9 @@ const InstancedParticles = () => {
 
 		for (let i = 0; i < data.length * 0.5; i += 4) {
 			// POSITION
-			data[i] = (Math.random() - 0.5) * 2 * 500;
+			data[i] = (Math.random() - 0.5) * 2 * 1000;
 			data[i + 1] = (Math.random() - 0.5) * 2 * TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
-			data[i + 2] = (Math.random() - 0.5) * 2 * 500;
+			data[i + 2] = (Math.random() - 0.5) * 2 * 1000;
 			data[i + 3] = (1 - (Math.random() * 0.5)); // store the weight in the origin texture
 			// data[i + 3] = 0;
 
@@ -277,7 +277,7 @@ const InstancedParticles = () => {
 				tPositions: { type: 't', value: positionsTexture },
 				tOrigins: { type: 't', value: originsTexture },
 				tPerlin: { type: 't', value: perlinTexture },
-				uBoundingBox: { value: new THREE.Vector3(500, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 500) },
+				uBoundingBox: { value: new THREE.Vector3(1000, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 1000) },
 				uTimePassed: { value: 0.0 },
 				uCorrection: { value: 1.0 },
 			},

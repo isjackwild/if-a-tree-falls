@@ -124,6 +124,7 @@ export const init = () => {
 	
 	leavesInstanced = Leaves();
 	leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
+	leavesInstanced.mesh.frustumCulled = false;
 	scene.add(leavesInstanced.mesh);
 
 	tree = Tree();
