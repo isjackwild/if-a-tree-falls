@@ -19,6 +19,7 @@
     "gsap": "^1.20.2",
     "gulp-util": "^3.0.7",
     "lodash": "^4.13.1",
+    "mobile-detect": "^1.4.1",
     "noisejs": "^2.1.0",
     "pubsub-js": "^1.5.3",
     "stats-js": "^1.0.0-alpha1",

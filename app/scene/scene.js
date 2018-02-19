@@ -114,14 +114,14 @@ export const init = () => {
 	}
 
 
-	// for (let i = 0; i < BIRD_COUNT; i++) {
-	// 	const x = Math.random() * BIRD_SETTINGS.bounds.x - BIRD_SETTINGS.bounds.x / 2;
-	// 	const y = (TREE_SEGS * TREE_SEG_HEIGHT * 0.5);
-	// 	const z = Math.random() * BIRD_SETTINGS.bounds.z - BIRD_SETTINGS.bounds.z / 2;
-	// 	const bird = Bird(new THREE.Vector3(x, y, z));
-	// 	birds.push(bird);
-	// 	scene.add(bird.mesh);
-	// }
+	for (let i = 0; i < BIRD_COUNT; i++) {
+		const x = Math.random() * BIRD_SETTINGS.bounds.x - BIRD_SETTINGS.bounds.x / 2;
+		const y = (TREE_SEGS * TREE_SEG_HEIGHT * 0.5);
+		const z = Math.random() * BIRD_SETTINGS.bounds.z - BIRD_SETTINGS.bounds.z / 2;
+		const bird = Bird(new THREE.Vector3(x, y, z));
+		birds.push(bird);
+		scene.add(bird.mesh);
+	}
 	
 	leavesInstanced = Leaves();
 	leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.5;

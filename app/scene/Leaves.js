@@ -41,9 +41,14 @@ const InstancedParticles = () => {
 
 	// console.log(colours);
 
-	positions.push( PARTICLE_SIZE, -PARTICLE_SIZE, 0 );
-	positions.push( -PARTICLE_SIZE, PARTICLE_SIZE, 0 );
-	positions.push( 0, 0, PARTICLE_SIZE );
+	// positions.push( PARTICLE_SIZE, -PARTICLE_SIZE, 0 );
+	// positions.push( -PARTICLE_SIZE, PARTICLE_SIZE, 0 );
+	// positions.push( 0, 0, PARTICLE_SIZE );
+
+	// const positions = [];
+	positions.push( -5, 0, 0 );
+	positions.push( 0, 5, 0 );
+	positions.push( 0, 60, 0 );
 
 	const tmpV4 = new THREE.Vector4();
 	let mesh, geometry;
@@ -100,7 +105,7 @@ const InstancedParticles = () => {
 		float NOISE_SPEED = 0.09;
 		float MAX_VELOCITY = 6.66;
 
-		vec3 GRAVITY = vec3(0.0, -0.3, 0.0);
+		vec3 GRAVITY = vec3(0.0, -0.6, 0.0);
 
 		void main() {
 			vec3 velocity = texture2D(tPositions, vec2(vUv.x, 1.0)).xyz;
@@ -181,7 +186,7 @@ const InstancedParticles = () => {
 
 		void main(){
 			vPosition = position;
-			vec4 orientation = normalize(mix(orientationStart, orientationEnd, sin(particlePosition.y * 5.0)));
+			vec4 orientation = normalize(mix(orientationStart, orientationEnd, sin(particlePosition.y * 0.1)));
 			vec3 vcV = cross( orientation.xyz, vPosition );
 			vPosition = vcV * ( 2.0 * orientation.w ) + ( cross( orientation.xyz, vcV ) * 2.0 + vPosition );
 			vUv = uv;
@@ -263,7 +268,7 @@ const InstancedParticles = () => {
 			wrapS: THREE.ClampToEdgeWrapping,
 			wrapT: THREE.ClampToEdgeWrapping,
 			format: THREE.RGBAFormat,
-			type: THREE.FloatType,
+			type: window.mobile ? THREE.HalfFloatType : THREE.FloatType,
 			depthBuffer: false,
 			stencilBuffer: false,
 			transparent: false,

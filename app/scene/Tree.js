@@ -233,8 +233,8 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		];
 		const v4 = new THREE.Vector4();
 		const offsets = [];
-		const positions = [];
 		const colours = [];
+		const positions = [];
 		positions.push( -80, 0, 0 );
 		positions.push( 0, 80, 0 );
 		positions.push( 0, 1000, 0 );
@@ -263,6 +263,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		// geometryLeaves.attributes.uv = geometryLeaf.attributes.uv;
 
 		const leaves = new THREE.Mesh(geometryLeaves, materialLeaves);
+		leaves.frustumCulled = false;
 		leaves.castShadow = true;
 		const leavesSolid = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 16), new THREE.MeshLambertMaterial({ fog: false, color: new THREE.Color(0x6A816C)}));
 

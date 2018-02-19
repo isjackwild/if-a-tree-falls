@@ -43,7 +43,7 @@
 			text-transform: uppercase;
 			text-rendering: optimizeLegibility;
 			-webkit-font-smoothing: antialiased;
-			color: #fff;
+			color: #ccc;
 			margin: 0;
 			letter-spacing: 0.4em;
 			width: 100%;
@@ -53,6 +53,12 @@
 			text-shadow: 1px 1px rgba(19, 53, 62, 0.6);
 			line-height: 1em;
 			margin-top: -4px;
+			-webkit-transition: opacity 30s ease-in;
+			transition: opacity 45s ease-in;
+		}
+
+		h1.loaded {
+			opacity: 0;
 		}
 
 		.fps {

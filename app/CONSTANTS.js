@@ -8,7 +8,7 @@ export const BIRD_COUNT = 12;
 export const BIRD_HEIGHT_VARIATION = 1200;
 export const BIRD_SETTINGS = {
 	bounds: { x: 20000, y: 600, z: 20000 },
-	maxVel: 100,
+	maxVel: 77,
 	maxSteer: 0.8,
 	seperation: 800,
 	viewDist: 1500, // how close siblings have to be for the bird to 'see' them and react to them
