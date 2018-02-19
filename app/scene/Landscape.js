@@ -98,7 +98,6 @@ const Landscape = () => {
 			// imageData[i + 2] += n;
 		}
 		context.putImageData(image, 0, 0);
-		// document.body.appendChild(canvasScaled);
 		canvasScaled.style.top = '0';
 		canvasScaled.style.left = '0';
 		canvasScaled.style.width = '400px';
@@ -108,12 +107,12 @@ const Landscape = () => {
 	};
 
 	const createGeometry = (terrain) => {
-		const geometry = new THREE.PlaneBufferGeometry(30000, 30000, 256 - 1, 256 - 1);
+		const geometry = new THREE.PlaneBufferGeometry(30000, 30000, 128 - 1, 128 - 1);
 		geometry.rotateX(Math.PI * -0.5);
 
 		const verts = geometry.attributes.position.array;
 		for (let i = 0, j = 0, l = verts.length; i < l; i++, j += 3) {
-			verts[j + 1] = terrain[i] * 1000;
+			verts[j + 1] = terrain[i * 2] * 1000;
 		}
 
 		return geometry;

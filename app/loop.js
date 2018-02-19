@@ -13,14 +13,14 @@ let currentCamera, currentScene;
 export let renderer, stereoFx;
 
 export const init = () => {
-	// stats = new Stats();
-	// stats.setMode(2);
+	stats = new Stats();
+	stats.setMode(2);
 
-	// stats.domElement.style.position = 'absolute';
-	// stats.domElement.style.left = '0px';
-	// stats.domElement.style.top = '0px';
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.left = '0px';
+	stats.domElement.style.top = '0px';
 
-	// document.body.appendChild(stats.domElement);
+	document.body.appendChild(stats.domElement);
 
 	canvas = document.getElementsByClassName('canvas')[0];
 	initAudio();
@@ -46,12 +46,7 @@ const setupRenderer = () => {
 		antialias: true,
 	});
 
-	if (window.location.search.indexOf('no-shadow') > -1) {
-		renderer.shadowMap.enabled = false;
-	} else {
-		renderer.shadowMap.enabled = true;
-		renderer.shadowMap.soft = true;
-	}
+	renderer.shadowMap.enabled = false;
 	renderer.setClearColor(0x0760ef);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -75,7 +70,7 @@ const render = () => {
 };
 
 const animate = () => {
-	// stats.begin();
+	stats.begin();
 	then = now ? now : null;
 	now = new Date().getTime();
 	correction = then ? (now - then) / 16.666 : 1;
@@ -83,5 +78,5 @@ const animate = () => {
 	update(correction);
 	render();
 	raf = requestAnimationFrame(animate);
-	// stats.end();
+	stats.end();
 };

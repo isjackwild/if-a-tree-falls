@@ -145,15 +145,15 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		texture.wrapT = THREE.RepeatWrapping;
 		texture.repeat.set(1, TREE_SEGS);
 
-		const material = new THREE.MeshStandardMaterial({
+		const material = new THREE.MeshLambertMaterial({
 			skinning: true,
 			// color: 0xff0000,
 			map: texture,
-			bumpMap: texture,
+			// bumpMap: texture,
 			bumpScale: 2,
-			color: 0x36252F,
-			metalness: 0,
-			roughness: 0.8,
+			color: 0x391A21,
+			// metalness: 0,
+			// roughness: 0.8,
 			// wireframe: true,
 			fog: false,
 			// side: THREE.DoubleSide,
@@ -162,6 +162,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		const mesh = new THREE.SkinnedMesh(geometry, material);
 		const skeleton = new THREE.Skeleton(bones);
 		mesh.castShadow = true;
+		0x36252F
 
 		// const materialLeaves = new THREE.RawShaderMaterial({
 		// 	color: 0x3f483a,
@@ -263,7 +264,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 
 		const leaves = new THREE.Mesh(geometryLeaves, materialLeaves);
 		leaves.castShadow = true;
-		const leavesSolid = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 16), new THREE.MeshLambertMaterial({ fog: false, color: new THREE.Color(0x95A594)}));
+		const leavesSolid = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 16), new THREE.MeshLambertMaterial({ fog: false, color: new THREE.Color(0x6A816C)}));
 
 		bones[bones.length - 1].add(leaves);
 		bones[bones.length - 1].add(leavesSolid);

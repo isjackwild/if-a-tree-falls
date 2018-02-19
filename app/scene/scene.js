@@ -47,13 +47,13 @@ export const init = () => {
 		scene.fog = new THREE.Fog(0x13353e, 0, 13000);
 	}
 	scene.add(camera);
-	scene.add( new THREE.AmbientLight( 0xffffff, 0.8 ) );
-	const sun = new THREE.DirectionalLight( 0xffffff, 0.4 );
-	sun.position.set(7000, TREE_SEGS * TREE_SEG_HEIGHT * 1.25, 0);
-	sun.castShadow = true;
-	sun.shadow.camera = new THREE.PerspectiveCamera();
-	sun.shadow.camera.far = 15000;
-	scene.add(sun);
+	scene.add( new THREE.AmbientLight( 0xffffff, 1 ) );
+	// const sun = new THREE.DirectionalLight( 0xffffff, 0.4 );
+	// sun.position.set(7000, TREE_SEGS * TREE_SEG_HEIGHT * 1.25, 0);
+	// sun.castShadow = true;
+	// sun.shadow.camera = new THREE.PerspectiveCamera();
+	// sun.shadow.camera.far = 15000;
+	// scene.add(sun);
 	// scene.add(new THREE.DirectionalLightHelper(sun));
 
 	// const sideLight = new THREE.DirectionalLight( 0xffffff, 0.2 );
@@ -104,6 +104,7 @@ export const init = () => {
 
 	// scene.add(new THREE.AxesHelper(160));
 	// 
+	
 	landscape = Landscape();
 	scene.add(landscape.mesh);
 
@@ -113,18 +114,17 @@ export const init = () => {
 	}
 
 
-	for (let i = 0; i < BIRD_COUNT; i++) {
-		const x = Math.random() * BIRD_SETTINGS.bounds.x - BIRD_SETTINGS.bounds.x / 2;
-		const y = (TREE_SEGS * TREE_SEG_HEIGHT * 0.5);
-		const z = Math.random() * BIRD_SETTINGS.bounds.z - BIRD_SETTINGS.bounds.z / 2;
-		const bird = Bird(new THREE.Vector3(x, y, z));
-		birds.push(bird);
-		scene.add(bird.mesh);
-	}
+	// for (let i = 0; i < BIRD_COUNT; i++) {
+	// 	const x = Math.random() * BIRD_SETTINGS.bounds.x - BIRD_SETTINGS.bounds.x / 2;
+	// 	const y = (TREE_SEGS * TREE_SEG_HEIGHT * 0.5);
+	// 	const z = Math.random() * BIRD_SETTINGS.bounds.z - BIRD_SETTINGS.bounds.z / 2;
+	// 	const bird = Bird(new THREE.Vector3(x, y, z));
+	// 	birds.push(bird);
+	// 	scene.add(bird.mesh);
+	// }
 	
 	leavesInstanced = Leaves();
 	leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
-	leavesInstanced.mesh.frustumCulled = false;
 	scene.add(leavesInstanced.mesh);
 
 	tree = Tree();
@@ -169,20 +169,9 @@ export const update = (correction) => {
 	// console.log(nx, 2);
 
 	windStrength = Math.abs(nx + nz) * 0.5;
-	// const fallChance = convertToRange(windStrength, [0, 1], [0.993, 0.8]);
-	// if (Math.random() > fallChance) {
-	// 	const rand = (Math.random() * 2) - 1;
-	// 	tmpV
-	// 		.setFromMatrixPosition(tree.bones[tree.bones.length - 1].matrixWorld)
-	// 		.add({ x: rand * TREE_LEAVES_RADIUS,  y: 0, z: rand * TREE_LEAVES_RADIUS });
-	// 	const leaf = Leaf(tmpV);
-	// 	scene.add(leaf.mesh);
-	// 	leaves.push(leaf);
-	// }
-
 
 	tree.update(nx, nz, noise);
-	leavesInstanced.update(correction);
+	leavesInstanced.update(correction, convertToRange(windStrength, [0, 1], [0.5, 1]));
 
 	tmpV.set(BIRD_TREE_DIST, 0, 0)
 		.applyAxisAngle(up, angle);
@@ -195,16 +184,5 @@ export const update = (correction) => {
 
 	birds.forEach(b => b.applyBehaviors(birdTarget, birds));
 	birds.forEach(b => b.update(correction));
-
-	for (let i = leaves.length - 1; i >= 0; i--) {
-		const l = leaves[i];
-		l.applyForce(GRAVITY);
-		l.applyForce(lookupFlowField(l.pos).multiplyScalar(20));
-		l.update(correction);
-		if (l.isDead) {
-			leaves.slice(-1);
-			scene.remove(l.mesh);
-		}
-	}
 };
 

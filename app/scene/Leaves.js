@@ -16,7 +16,8 @@ const InstancedParticles = () => {
 	const PARTICLE_SIZE = 10;
 	const positions = [];
 	const offsets = [];
-	const uvs = [];
+	const uvs = [0, 0, 1, 0, 0.5, 1];
+	const dataUvs = [];
 	const orientationsStart = [];
 	const orientationsEnd = [];
 	const startTime = Date.now();
@@ -63,8 +64,8 @@ const InstancedParticles = () => {
 
 		const u = i / INSTANCES;
 		const v = 0.0;
-		uvs.push(u, v);
-		
+		dataUvs.push(u, v);
+
 		const c = leafColours[i % leafColours.length];
 		colours.push(c.r, c.g, c.b);
 	}
@@ -92,13 +93,14 @@ const InstancedParticles = () => {
 
 		uniform float uTimePassed;
 		uniform float uCorrection;
+		uniform float uWindStrength;
 
 		float NOISE_SCALE = 0.5;
-		float WIND_STRENGTH = 2.0;
+		float WIND_STRENGTH = 1.0;
 		float NOISE_SPEED = 0.09;
-		float MAX_VELOCITY = 10.0;
+		float MAX_VELOCITY = 6.66;
 
-		vec3 GRAVITY = vec3(0.0, -3.0, 0.0);
+		vec3 GRAVITY = vec3(0.0, -0.3, 0.0);
 
 		void main() {
 			vec3 velocity = texture2D(tPositions, vec2(vUv.x, 1.0)).xyz;
@@ -122,7 +124,7 @@ const InstancedParticles = () => {
 			velocity += acceleration;
 
 			// vec3 mappedVelocity = normalize(velocity - 0.5);
-			pos += normalize(velocity) * MAX_VELOCITY;
+			pos += normalize(velocity) * MAX_VELOCITY * uCorrection * uWindStrength;
 
 			if (pos.x < -uBoundingBox.x) pos.x = uBoundingBox.x;
 			if (pos.x > uBoundingBox.x) pos.x = -uBoundingBox.x;
@@ -164,6 +166,7 @@ const InstancedParticles = () => {
 		uniform mat4 modelViewMatrix;
 		uniform mat4 projectionMatrix;
 
+		attribute vec2 dataUv;
 		attribute vec2 uv;
 		attribute vec3 position;
 		attribute vec3 offset;
@@ -174,14 +177,16 @@ const InstancedParticles = () => {
 
 		varying vec3 vPosition;
 		varying vec3 vColor;
+		varying vec2 vUv;
 
 		void main(){
 			vPosition = position;
 			vec4 orientation = normalize(mix(orientationStart, orientationEnd, sin(particlePosition.y * 5.0)));
 			vec3 vcV = cross( orientation.xyz, vPosition );
 			vPosition = vcV * ( 2.0 * orientation.w ) + ( cross( orientation.xyz, vcV ) * 2.0 + vPosition );
+			vUv = uv;
 			
-			vec3 data = texture2D( tPositions, vec2(uv.x, 0.0)).xyz;
+			vec3 data = texture2D( tPositions, vec2(dataUv.x, 0.0)).xyz;
 			vec3 particlePosition = data;
 
 			vColor = colour;
@@ -195,11 +200,14 @@ const InstancedParticles = () => {
 
 		varying vec3 vPosition;
 		varying vec3 vColor;
+		varying vec2 vUv;
 
-		float TIME_TRANSITION = 10000.0;
 
 		void main() {
-			gl_FragColor = vec4(vColor, 1.0);
+			float x = (vUv.x + 4.0) * (vUv.y + 4.0) * 100.0;
+			vec4 grain = vec4(mod((mod(x, 13.0) + 1.0) * (mod(x, 123.0) + 1.0), 0.01) - 0.005) * 10.0;
+
+			gl_FragColor = vec4(vColor + grain.xyz, 1.0);
 		}
 	`;
 
@@ -208,9 +216,9 @@ const InstancedParticles = () => {
 
 		for (let i = 0; i < data.length * 0.5; i += 4) {
 			// POSITION
-			data[i] = (Math.random() - 0.5) * 2 * 1000;
+			data[i] = (Math.random() - 0.5) * 2 * 800;
 			data[i + 1] = (Math.random() - 0.5) * 2 * TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
-			data[i + 2] = (Math.random() - 0.5) * 2 * 1000;
+			data[i + 2] = (Math.random() - 0.5) * 2 * 800;
 			data[i + 3] = (1 - (Math.random() * 0.5)); // store the weight in the origin texture
 			// data[i + 3] = 0;
 
@@ -280,6 +288,7 @@ const InstancedParticles = () => {
 				uBoundingBox: { value: new THREE.Vector3(1000, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 1000) },
 				uTimePassed: { value: 0.0 },
 				uCorrection: { value: 1.0 },
+				uWindStrength: { value: 1.0 },
 			},
 			vertexShader: vertexSimulationShader,
 			fragmentShader: fragmentSimulationShader,
@@ -295,7 +304,8 @@ const InstancedParticles = () => {
 		geometry.maxInstancedCount = INSTANCES;
 
 		geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
-		geometry.addAttribute( 'uv', new THREE.InstancedBufferAttribute( new Float32Array( uvs ), 2 ) );
+		geometry.addAttribute( 'uv', new THREE.Float32BufferAttribute( new Float32Array( uvs ), 2 ) );
+		geometry.addAttribute( 'dataUv', new THREE.InstancedBufferAttribute( new Float32Array( dataUvs ), 2 ) );
 		geometry.addAttribute( 'offset', new THREE.InstancedBufferAttribute( new Float32Array( offsets ), 3 ) );
 		geometry.addAttribute( 'colour', new THREE.InstancedBufferAttribute( new Float32Array( colours ), 3 ) );
 		geometry.addAttribute( 'orientationStart', new THREE.InstancedBufferAttribute( new Float32Array( orientationsStart ), 4 ) );
@@ -308,7 +318,7 @@ const InstancedParticles = () => {
 		const uniforms = {
 			// color: { type: 'c', value: new THREE.Color(0x3f483a) },
 			tPositions: { type: 't', value: positionSimulationTexture },
-			uBoundingBox: { value: new THREE.Vector3(500, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 500) },
+			uBoundingBox: { value: new THREE.Vector3(800, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 800) },
 		};
 
 		const material = new THREE.RawShaderMaterial({
@@ -323,10 +333,11 @@ const InstancedParticles = () => {
 	};
 
 
-	const update = (correction) => {
+	const update = (correction, windStrength) => {
 		const secsPast = (Date.now() - startTime) / 1000;
 		simulationMaterial.uniforms.uTimePassed.value = secsPast;
 		simulationMaterial.uniforms.uCorrection.value = correction;
+		simulationMaterial.uniforms.uWindStrength.value = windStrength || 1;
 		// console.log((simulationMaterial.uniforms.uTime.value - simulationMaterial.uniforms.uStartTime.value) / 1000);
 
 
@@ -353,6 +364,7 @@ const InstancedParticles = () => {
 	simulationMaterial = createSimulationMaterial(originsTexture, renderTarget1, perlinTexture);
 	geometry = createGeometry();
 	mesh = createMesh(geometry, renderTarget1);
+	mesh.frustumCulled = false;
 
 	const debugMesh = new THREE.Mesh(
 		new THREE.PlaneGeometry( 512 * 2, 512 * 0.5 ),

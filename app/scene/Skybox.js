@@ -8,7 +8,9 @@ const Skybox = () => {
       },
       color2: {
         type: "c",
-        value: new THREE.Color(0x6588af), //blue
+        // value: new THREE.Color(0x6588af), //blue
+        // value: new THREE.Color(0x142C53), //blue
+        value: new THREE.Color(0x13353e), //blue
       },
     };
     
@@ -19,7 +21,7 @@ const Skybox = () => {
 
 		void main() {
 			float TWO_PI = 3.1416 * 2.0;
-			float stretchedUV = clamp((vUv.y * 2.8) - 1.0, 0.0, 1.0); 
+			float stretchedUV = clamp(vUv.y * 1.1, 0.0, 1.0); 
 			float control = (cos(stretchedUV * TWO_PI) + 1.0) * 0.5;
 
 			float x = (vUv.x + 4.0) * (vUv.y + 4.0) * 100.0;
@@ -38,7 +40,7 @@ const Skybox = () => {
 	`;
 
 	const mesh = new THREE.Mesh(
-		new THREE.SphereBufferGeometry(25000, 36, 36),
+		new THREE.SphereBufferGeometry(25000, 18, 18),
 		new THREE.ShaderMaterial({
 			side: THREE.DoubleSide,
 			uniforms,

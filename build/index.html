@@ -7,6 +7,9 @@
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0" />
 
+	<link rel="stylesheet" type="text/css" href="http://mplus-fonts.sourceforge.jp/webfonts/basic_latin/mplus_webfonts.css">
+	<link href="https://fonts.googleapis.com/css?family=Abel|Josefin+Slab:300i,400|Overpass+Mono:300|Rajdhani|Scope+One|Zilla+Slab:300i,400,400i" rel="stylesheet">
+
 	<style>
 		body, html {
 			padding: 0;
@@ -24,6 +27,34 @@
 			right: 0;
 		}
 
+		h1 {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			font-family: 'M+ P Type-1 (basic latin) Light';
+			font-family: 'Abel', sans-serif;
+			/*font-family: 'Rajdhani', sans-serif;*/
+			/*font-family: 'Josefin Slab', serif;*/
+			/*font-family: 'Zilla Slab', serif;
+			font-family: 'Scope One', serif;
+			font-family: 'Overpass Mono', monospace;*/
+			font-weight: 300;
+			transform: translate(-50%, -50%);
+			text-transform: uppercase;
+			text-rendering: optimizeLegibility;
+			-webkit-font-smoothing: antialiased;
+			color: #fff;
+			margin: 0;
+			letter-spacing: 0.4em;
+			width: 100%;
+			font-size: 16px;
+			text-align: center;
+			pointer-events: none;
+			text-shadow: 1px 1px rgba(19, 53, 62, 0.6);
+			line-height: 1em;
+			margin-top: -4px;
+		}
+
 		.fps {
 			position: absolute;
 			top: 0;
@@ -37,6 +68,7 @@
 
 	<canvas class="canvas"></canvas>
 	<span class="fps"></span>
+	<h1>at some point this tree will fall</h1>
 
 	<!-- main code -->
 	<script type="text/javascript" src="assets/js/three.min.js"></script>
