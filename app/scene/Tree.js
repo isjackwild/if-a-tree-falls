@@ -5,7 +5,8 @@ import { convertToRange } from '../lib/maths';
 
 
 const Tree = (initPos = new THREE.Vector3()) => {
-	let mesh, bones;
+	let mesh, leaves, bones;
+	const startTime = new Date().getTime();
 	const createGeometry = ({ halfHeight, height, segHeight, segCount }) => {
 		// radTop, radBottom, height, radSegs, heightSegs, openEnded
 		const geometry = new THREE.CylinderGeometry(15, 60, height, 8, segCount, true);
@@ -159,10 +160,9 @@ const Tree = (initPos = new THREE.Vector3()) => {
 			// side: THREE.DoubleSide,
 		});
 
-		const mesh = new THREE.SkinnedMesh(geometry, material);
+		const treeMesh = new THREE.SkinnedMesh(geometry, material);
 		const skeleton = new THREE.Skeleton(bones);
-		mesh.castShadow = true;
-		0x36252F
+		// treeMesh.castShadow = true;
 
 		// const materialLeaves = new THREE.RawShaderMaterial({
 		// 	color: 0x3f483a,
@@ -175,6 +175,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 			precision highp float;
 			uniform mat4 modelViewMatrix;
 			uniform mat4 projectionMatrix;
+			uniform float uTimePassed;
 			// uniform vec3 color;
 			
 			attribute vec3 colour;
@@ -188,6 +189,9 @@ const Tree = (initPos = new THREE.Vector3()) => {
 			varying vec3 vPosition;
 
 			void main() {
+
+
+
 				vPosition = (offset * 200.0) + 500.0 + position;
 				vec3 vcV = cross( orientation.xyz, vPosition );
 				vPosition = vcV * ( 2.0 * orientation.w ) + ( cross( orientation.xyz, vcV ) * 2.0 + vPosition );
@@ -219,6 +223,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 			uniforms: {
 				color: { type: 'c', value: new THREE.Color(0xC67A5B) },
 				tMap: { type: 't', value: leafTexture },
+				uTimePassed: { value: 0.0 },
 			},
 			side: THREE.DoubleSide,
 		});
@@ -249,7 +254,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 			const c = leafColours[i % leafColours.length];
 			colours.push(c.r, c.g, c.b);
 		};
-		
+
 		// const geometryLeaf = new THREE.PlaneBufferGeometry(140, 140, 1);
 		const geometryLeaves = new THREE.InstancedBufferGeometry();
 		geometryLeaves.maxInstancedCount = TREE_LEAVES_COUNT;
@@ -262,27 +267,26 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		// geometryLeaves.attributes.index = geometryLeaf.index;
 		// geometryLeaves.attributes.uv = geometryLeaf.attributes.uv;
 
-		const leaves = new THREE.Mesh(geometryLeaves, materialLeaves);
-		leaves.frustumCulled = false;
-		leaves.castShadow = true;
+		const leavesMesh = new THREE.Mesh(geometryLeaves, materialLeaves);
+		leavesMesh.frustumCulled = false;
+		leavesMesh.castShadow = true;
 		const leavesSolid = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 16), new THREE.MeshLambertMaterial({ fog: false, color: new THREE.Color(0x6A816C)}));
 
-		bones[bones.length - 1].add(leaves);
+		bones[bones.length - 1].add(leavesMesh);
 		bones[bones.length - 1].add(leavesSolid);
-		// mesh.add(leaves);
-		console.log(leaves);
-		// leaves.add(bones[bones.length - 1]);
-		// mes.
 
-		mesh.add(bones[0]);
-		mesh.bind(skeleton);
-		const skeletonHelper = new THREE.SkeletonHelper(mesh);
-		skeletonHelper.material.linewidth = 2;
+		treeMesh.add(bones[0]);
+		treeMesh.bind(skeleton);
+		// const skeletonHelper = new THREE.SkeletonHelper(treeMesh);
+		// skeletonHelper.material.linewidth = 2;
 
-		return mesh;
+		return { treeMesh, leavesMesh };
 	};
 
 	const update = (nx, nz, noise) => {
+		const secsPast = (Date.now() - startTime) / 1000;
+		leaves.material.uniforms.uTimePassed.value = secsPast;
+
 		bones.forEach((b, i) => {
 			const multi = convertToRange(i, [0, bones.length], [1, 0.25]);
 
@@ -308,7 +312,9 @@ const Tree = (initPos = new THREE.Vector3()) => {
 
 	const geometry = createGeometry(size);
 	bones = createBones(size);
-	mesh = createMesh(geometry, bones);
+	const meshes = createMesh(geometry, bones);
+	mesh = meshes.treeMesh;
+	leaves = meshes.leavesMesh;
 	mesh.position.y = halfHeight;
 
 	return { mesh, bones, update };

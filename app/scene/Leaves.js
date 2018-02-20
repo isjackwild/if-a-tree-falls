@@ -101,7 +101,7 @@ const InstancedParticles = () => {
 		uniform float uWindStrength;
 
 		float NOISE_SCALE = 0.5;
-		float WIND_STRENGTH = 1.0;
+		float WIND_STRENGTH = 0.7;
 		float NOISE_SPEED = 0.09;
 		float MAX_VELOCITY = 6.66;
 
