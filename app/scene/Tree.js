@@ -8,7 +8,6 @@ const Tree = (initPos = new THREE.Vector3()) => {
 	let mesh, leaves, bones;
 	const startTime = new Date().getTime();
 	const createGeometry = ({ halfHeight, height, segHeight, segCount }) => {
-		// radTop, radBottom, height, radSegs, heightSegs, openEnded
 		const geometry = new THREE.CylinderGeometry(15, 60, height, 8, segCount, true);
 
 		geometry.vertices.forEach(v => {
@@ -90,16 +89,11 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		contextTiled.translate(-width, -height);
 		contextTiled.drawImage(canvas, 0, 0);
 
-
-		// contextTiled.drawImage(canvas, 0, height);
-		// contextTiled.drawImage(canvas, width, height);
-
 		canvasTiled.style.top = '0';
 		canvasTiled.style.left = '0';
 		canvasTiled.style.width = '400px';
 		canvasTiled.style.height = 'auto';
 		canvasTiled.style.position = 'relative';
-		// document.body.appendChild(canvasTiled);
 
 		return canvasTiled;
 	};
@@ -135,7 +129,6 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		canvas.style.width = '400px';
 		canvas.style.height = 'auto';
 		canvas.style.position = 'relative';
-		// document.body.appendChild(canvas);
 
 		return canvas;
 	};
@@ -148,29 +141,15 @@ const Tree = (initPos = new THREE.Vector3()) => {
 
 		const material = new THREE.MeshLambertMaterial({
 			skinning: true,
-			// color: 0xff0000,
 			map: texture,
-			// bumpMap: texture,
 			bumpScale: 2,
 			color: 0x391A21,
-			// metalness: 0,
-			// roughness: 0.8,
-			// wireframe: true,
 			fog: false,
-			// side: THREE.DoubleSide,
 		});
 
 		const treeMesh = new THREE.SkinnedMesh(geometry, material);
 		const skeleton = new THREE.Skeleton(bones);
-		// treeMesh.castShadow = true;
 
-		// const materialLeaves = new THREE.RawShaderMaterial({
-		// 	color: 0x3f483a,
-		// 	metalness: 0,
-		// 	roughness: 0.8,
-		// 	// fog: false,
-		// });
-		// 
 		const vertexShader = `
 			precision highp float;
 			uniform mat4 modelViewMatrix;
@@ -247,7 +226,13 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		const orientations = [];
 		for (let i = 0; i < TREE_LEAVES_COUNT; i++) {
 			// positions.push(Math.random() * 1000, Math.random() * 1000, Math.random() * 1000);
-			v4.set( Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1 );
+			
+			v4.set(
+				Math.random() * 2 - 1,
+				Math.random() * 2 - 1,
+				Math.random() * 2 - 1,
+				Math.random() * 2 - 1
+			);
 			v4.normalize();
 			orientations.push(v4.x, v4.y, v4.z, v4.w);
 			offsets.push( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
@@ -263,9 +248,6 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		geometryLeaves.addAttribute( 'offset', new THREE.InstancedBufferAttribute(new Float32Array(offsets), 3));
 		geometryLeaves.addAttribute( 'colour', new THREE.InstancedBufferAttribute(new Float32Array(colours), 3));
 		geometryLeaves.addAttribute( 'orientation', new THREE.InstancedBufferAttribute(new Float32Array(orientations), 4));
-		// geometryLeaves.attributes.position = geometryLeaf.attributes.position;
-		// geometryLeaves.attributes.index = geometryLeaf.index;
-		// geometryLeaves.attributes.uv = geometryLeaf.attributes.uv;
 
 		const leavesMesh = new THREE.Mesh(geometryLeaves, materialLeaves);
 		leavesMesh.frustumCulled = false;

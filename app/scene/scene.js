@@ -48,63 +48,7 @@ export const init = () => {
 	}
 	scene.add(camera);
 	scene.add( new THREE.AmbientLight( 0xffffff, 1 ) );
-	// const sun = new THREE.DirectionalLight( 0xffffff, 0.4 );
-	// sun.position.set(7000, TREE_SEGS * TREE_SEG_HEIGHT * 1.25, 0);
-	// sun.castShadow = true;
-	// sun.shadow.camera = new THREE.PerspectiveCamera();
-	// sun.shadow.camera.far = 15000;
-	// scene.add(sun);
-	// scene.add(new THREE.DirectionalLightHelper(sun));
 
-	// const sideLight = new THREE.DirectionalLight( 0xffffff, 0.2 );
-	// sideLight.position.set(30000, 300, -500);
-	// // sideLight.castShadow = true;
-	// // sideLight.shadow.camera = new THREE.PerspectiveCamera();
-	// // sideLight.shadow.camera.far = 15000;
-	// scene.add(sideLight);
-	// scene.add(new THREE.DirectionalLightHelper(sideLight));
-
-	// const floorTmpGeometry = new THREE.PlaneGeometry(30000, 30000, 32, 32);
-	// floorTmpGeometry.rotateX(Math.PI * -0.5);
-	// floorTmpGeometry.vertices.forEach(v => {
-	// 	const offsetSmall = noise.simplex2(v.x * 0.8, v.z * 0.8) * 60;
-	// 	const offsetLarge = noise.simplex2(v.z * 0.05, v.x * 0.2) * 300;
-	// 	v.y += offsetSmall + offsetLarge;
-	// });
-	// floorTmpGeometry.normalsNeedUpdate = true;
-	// floorTmpGeometry.verticesNeedUpdate = true;
-	// floorTmpGeometry.computeFaceNormals();
-	// floorTmpGeometry.computeVertexNormals();
-	// const floorGeometry = new THREE.BufferGeometry().fromGeometry(floorTmpGeometry);
-
-	// const texture = new THREE.TextureLoader().load('assets/maps/texture-grass-56526-xxl.jpg');
-	// texture.wrapS = THREE.RepeatWrapping;
-	// texture.wrapT = THREE.RepeatWrapping;
-	// texture.repeat.set(100, 100);
-
-	// const textureBump = new THREE.TextureLoader().load('assets/maps/texture-grass-56526-xxl.jpg');
-	// textureBump.wrapS = THREE.RepeatWrapping;
-	// textureBump.wrapT = THREE.RepeatWrapping;
-	// textureBump.repeat.set(100, 100);
-	// const floorMaterial = new THREE.MeshStandardMaterial({
-	// 	color: 0x33c69f,
-	// 	wireframe: false,
-	// 	// map: texture,
-	// 	// bumpMap: texture,
-	// 	bumpScale: 1,
-	// 	metalness: 0,
-	// 	roughness: 0.5,
-	// 	fog: new THREE.Fog(0xff0000, 0, 8888),
-	// 	// normalMap: texture,
-	// });
-	// const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-	// floor.receiveShadow = true;
-	// floor.castShadow = true;
-	// scene.add(floor);
-
-	// scene.add(new THREE.AxesHelper(160));
-	// 
-	
 	landscape = Landscape();
 	scene.add(landscape.mesh);
 
