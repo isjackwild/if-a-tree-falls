@@ -1,4 +1,3 @@
-// const THREE = require('three');
 import { FF_DIMENTIONS, FF_RESOLUTION, FF_NOISE_SCALE, FF_NOISE_SPEED } from './CONSTANTS.js';
 import { Noise } from 'noisejs';
 

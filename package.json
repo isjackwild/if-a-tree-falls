@@ -23,7 +23,8 @@
     "noisejs": "^2.1.0",
     "pubsub-js": "^1.5.3",
     "stats-js": "^1.0.0-alpha1",
-    "three": "^0.89.0"
+    "three": "^0.89.0",
+    "webvr-boilerplate": "^0.5.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",

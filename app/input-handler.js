@@ -1,4 +1,3 @@
-// const THREE = require('three');
 import _ from 'lodash';
 import PubSub from 'pubsub-js';
 

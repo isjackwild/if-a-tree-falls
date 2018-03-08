@@ -1,5 +1,3 @@
-// const THREE = require('three');
-
 const Skybox = () => {
 	const uniforms = {
       color1: {

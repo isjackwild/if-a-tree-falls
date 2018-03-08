@@ -1,4 +1,3 @@
-// const THREE = require('three');
 const dat = require('dat-gui');
 import MobileDetect from 'mobile-detect';
 
@@ -20,6 +19,16 @@ const kickIt = () => {
 	onResize();
 	init();
 	document.querySelector('h1').classList.add('loaded');
+
+	document.querySelector('.show-notes').addEventListener('click', e => {
+		e.stopPropagation();
+		document.querySelector('.notes').classList.remove('notes--hidden');
+	});
+
+	document.querySelector('.hide-notes').addEventListener('click', e => {
+		e.stopPropagation();
+		document.querySelector('.notes').classList.add('notes--hidden');
+	});
 };
 
 const onResize = () => {

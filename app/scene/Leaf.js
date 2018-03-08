@@ -1,4 +1,3 @@
-// const THREE = require('three');
 import { LEAF_SETTINGS as SETTINGS } from '../CONSTANTS';
 
 const Leaf = (initPos = new THREE.Vector3()) => {

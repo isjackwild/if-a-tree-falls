@@ -1,4 +1,3 @@
-// const THREE = require('three');
 import { Noise } from 'noisejs';
 export let scene, boxMesh;
 import { camera } from '../camera';

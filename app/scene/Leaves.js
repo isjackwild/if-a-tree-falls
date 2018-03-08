@@ -1,4 +1,3 @@
-// const THREE = require('three');
 import GPGPU from '../vendor/GPGPU';
 import { renderer } from '../loop';
 import _ from 'lodash';

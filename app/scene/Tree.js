@@ -1,4 +1,3 @@
-// const THREE = require('three');
 import { TREE_SEGS, TREE_SEG_HEIGHT, WIND_STRENGTH, TREE_LEAVES_COUNT } from '../CONSTANTS';
 import { Noise } from 'noisejs';
 import { convertToRange } from '../lib/maths';

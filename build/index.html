@@ -1,14 +1,13 @@
 <html>
 <head>
-	<title>Boilerplate</title>
+	<title>At Some Point This Tree Will Fall</title>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0" />
 
-	<link rel="stylesheet" type="text/css" href="http://mplus-fonts.sourceforge.jp/webfonts/basic_latin/mplus_webfonts.css">
-	<link href="https://fonts.googleapis.com/css?family=Abel|Josefin+Slab:300i,400|Overpass+Mono:300|Rajdhani|Scope+One|Zilla+Slab:300i,400,400i" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
 
 	<style>
 		body, html {
@@ -17,6 +16,18 @@
 			width: 100%;
 			height: 100%;
 			overflow: hidden;
+			position: fixed;
+
+			font-family: 'Abel', sans-serif;
+			font-weight: 300;
+			text-transform: uppercase;
+			text-rendering: optimizeLegibility;
+			-webkit-font-smoothing: antialiased;
+			letter-spacing: 0.4em;
+			font-size: 14px;
+			text-shadow: 1px 1px rgba(19, 53, 62, 0.6);
+			text-align: center;
+			color: #ccc;
 		}
 
 		.canvas {
@@ -31,30 +42,16 @@
 			position: absolute;
 			top: 50%;
 			left: 50%;
-			font-family: 'M+ P Type-1 (basic latin) Light';
-			font-family: 'Abel', sans-serif;
-			/*font-family: 'Rajdhani', sans-serif;*/
-			/*font-family: 'Josefin Slab', serif;*/
-			/*font-family: 'Zilla Slab', serif;
-			font-family: 'Scope One', serif;
-			font-family: 'Overpass Mono', monospace;*/
-			font-weight: 300;
 			transform: translate(-50%, -50%);
-			text-transform: uppercase;
-			text-rendering: optimizeLegibility;
-			-webkit-font-smoothing: antialiased;
-			color: #ccc;
-			margin: 0;
-			letter-spacing: 0.4em;
-			width: 100%;
 			font-size: 14px;
-			text-align: center;
+			margin: 0;
+			width: 100%;
 			pointer-events: none;
-			text-shadow: 1px 1px rgba(19, 53, 62, 0.6);
 			line-height: 1em;
 			margin-top: -4px;
 			-webkit-transition: opacity 30s ease-in;
 			transition: opacity 45s ease-in;
+			font-weight: 300;
 		}
 
 		h1.loaded {
@@ -68,6 +65,108 @@
 			font-size: 20px;
 			z-index: 111;
 		}
+
+		.hide-notes {
+			position: absolute;
+			top: 15px;
+			z-index: 2;
+		}
+
+		.notes {
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			background: red;
+			background: linear-gradient(to bottom, #355156 0%,#e0e2d7 100%);
+			text-align: center;
+			transition: transform 0.3s ease;
+			transform: translateY(0%) translateZ(0);
+			text-shadow: none;
+		}
+
+		.notes--hidden {
+			transform: translateY(100%) translateZ(0);
+		}
+
+		.notes__inner {
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			overflow: scroll;
+			-webkit-overflow-scrolling: touch;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding-top: 30px;
+		}
+
+		.notes:after {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: calc(100% - 10px);
+			height: 100px;
+			/*background: red;*/
+			content: '';
+			/*background: linear-gradient(to bottom, #c9f0ff 40%, rgba(#c9f0ff, 0) 100%);*/
+		}
+
+		.notes__inner-text {
+			font-size: 18px;
+			letter-spacing: 0.02em;
+			line-height: 1.8em;
+			color: #000;
+			width: 92%;
+			max-width: 600px;
+			margin: auto;
+			padding-top: 120px;
+			padding-bottom: 120px;
+			text-transform: none;
+			/*text-shadow:
+				1px 1px 15px rgba(190, 190, 190, 0.12),
+				1px 1px 1px rgba(190, 190, 190, 0.15);*/
+
+			@media only screen and (max-width: 768px) {
+				padding-bottom: 50px;
+			}
+		}
+
+		.notes__inner p {
+			margin-bottom: 2em;
+			text-align: left;
+		}
+
+		.notes__inner p:last-child {
+			margin-bottom: 0;
+		}
+
+		.show-notes {
+			position: absolute;
+			bottom: 15px;
+			left: 50%;
+		}
+
+		.show-notes, .hide-notes {
+			letter-spacing: 0.2em;
+			transform: translateX(-50%);
+			cursor: pointer;
+			font-size: 14px;
+			user-select: none;
+			text-shadow:
+		       // 3px 3px 0 #333,
+		     -1px -1px 0 #333,  
+		      1px -1px 0 #333,
+		      -1px 1px 0 #333,
+		       1px 1px 0 #333;
+		}
+
+		.show-notes:hover, .hide-notes:hover {
+			color: #fff;
+		}
 	</style>
 </head>
 <body>
@@ -75,6 +174,17 @@
 	<canvas class="canvas"></canvas>
 	<span class="fps"></span>
 	<h1>at some point this tree will fall</h1>
+	<span class="show-notes">Notes</span>
+	<section class="notes notes--hidden">
+		<main class="notes__inner">
+			<div class="notes__inner-text">
+				<p>Escape information-overload and wait for a non-event. Sure, it might not <i>really</i> happen—but hey—who cares...(?)</p>
+				<p>Simulations and virtual environments are directly informed by nature, and are thus an extension of it, rather than mere attempts at replication. ‘At Some Point This Tree Will Fall’ explores the use of these technologies as a way of reconnecting with nature, and seeks to validate it as such.</p>
+				<p>Jack Wild, 2018</p>
+			</div>
+		</main>
+		<span class="hide-notes">Close</span>
+	</section>
 
 	<!-- main code -->
 	<script type="text/javascript" src="assets/js/three.min.js"></script>

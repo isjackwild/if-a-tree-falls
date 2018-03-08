@@ -1,5 +1,3 @@
-// const THREE = require('three');
-
 const Leaves = () => {
 	const INSTANCES = 50000;
 	const positions = [];

@@ -1,5 +1,3 @@
-// const THREE = require('three');
-// require('./vendor/StereoEffect.js');
 import Stats from 'stats-js';
 import { init as initScene, scene, update as updateScene, setCameraPosition } from './scene/scene';
 import { init as initCamera, camera } from './camera';
@@ -20,7 +18,7 @@ export const init = () => {
 	stats.domElement.style.left = '0px';
 	stats.domElement.style.top = '0px';
 
-	document.body.appendChild(stats.domElement);
+	// document.body.appendChild(stats.domElement);
 
 	canvas = document.getElementsByClassName('canvas')[0];
 	initAudio();

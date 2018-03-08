@@ -1,4 +1,3 @@
-// const THREE = require('three');
 import { BIRD_SETTINGS as SETTINGS } from '../CONSTANTS';
 import { convertToRange } from '../lib/maths';
 
