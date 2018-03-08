@@ -1,6 +1,6 @@
 import { Noise } from 'noisejs';
 export let scene, boxMesh;
-import { camera } from '../camera';
+import { camera, viewPosition } from '../camera';
 import { controls } from '../controls';
 import { convertToRange } from '../lib/maths';
 import Easing from '../lib/easing-functions';
@@ -45,7 +45,7 @@ export const init = () => {
 	} else {
 		scene.fog = new THREE.Fog(0x13353e, 0, 13000);
 	}
-	scene.add(camera);
+	// scene.add(camera);
 	scene.add( new THREE.AmbientLight( 0xffffff, 1 ) );
 
 	landscape = Landscape();
@@ -82,7 +82,7 @@ export const init = () => {
 	console.time('fall');
 };
 
-export const setCameraPosition = () => {
+export const setViewPosition = () => {
 	const raycaster = new THREE.Raycaster();
 	raycaster.set(new THREE.Vector3(0, 5000, 0), new THREE.Vector3(0, -1, 0));
 	const intersects = raycaster.intersectObject(landscape.mesh);
@@ -90,6 +90,14 @@ export const setCameraPosition = () => {
 	if (window.location.search.indexOf('view=') === -1) {
 		camera.position.y += intersects[0].point.y;
 		controls.target.y += intersects[0].point.y;
+	}
+
+	if (window.location.search.indexOf('web-vr') > -1) {
+		viewPosition.copy(camera.position);
+		scene.position.sub(viewPosition);
+		// console.log(scene.position);
+		// scene.position.set(10, 10, 10);
+		console.log(scene.position);
 	}
 };
 

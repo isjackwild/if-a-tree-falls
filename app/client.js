@@ -1,5 +1,6 @@
 const dat = require('dat-gui');
 import MobileDetect from 'mobile-detect';
+import 'es6-promise';
 
 import { init, renderer } from './loop.js';
 import { camera } from './camera.js';

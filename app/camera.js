@@ -1,10 +1,11 @@
 import { TREE_SEG_HEIGHT, TREE_SEGS } from './CONSTANTS';
 
 export let camera;
+export let viewPosition = new THREE.Vector3();
 
 
 export const init = () => {
-	const fov = (window.location.search.indexOf('vr') > -1) ? 120 : 90;
+	const fov = (window.location.search.indexOf('phone-vr') > -1) ? 120 : 90;
 	camera = new THREE.PerspectiveCamera(fov, window.app.width / window.app.height, 1, 30000);
 	if (window.location.search.indexOf('view=top-down') > -1) {
 		camera.position.set(0, TREE_SEG_HEIGHT * TREE_SEGS * 1.2, 1000);
@@ -18,5 +19,9 @@ export const init = () => {
 	} else {
 		camera.position.set(0, 200, 444);
 		camera.lookAt(0, 160, 0);
+	}
+
+	if (window.location.search.indexOf('web-vr') > -1) {
+		viewPosition.copy(camera.position);
 	}
 };

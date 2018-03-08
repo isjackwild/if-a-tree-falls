@@ -1,6 +1,6 @@
 import Stats from 'stats-js';
-import { init as initScene, scene, update as updateScene, setCameraPosition } from './scene/scene';
-import { init as initCamera, camera } from './camera';
+import { init as initScene, scene, update as updateScene, setViewPosition } from './scene/scene';
+import { init as initCamera, camera, viewPosition } from './camera';
 import { init as initControls, update as updateControls } from './controls';
 import { init as initAudio, update as updateAudio } from './audio';
 import { update as updateFlowField } from './flow-field';
@@ -26,7 +26,16 @@ export const init = () => {
 	initCamera();
 	initScene();
 	initControls();
-	setCameraPosition();
+	setViewPosition();
+
+	if (window.location.search.indexOf('web-vr') > -1) {
+		document.body.appendChild(WEBVR.createButton(renderer));
+	}
+
+	// const target = new THREE.Object3D();
+	// target.position.copy(camera.position);
+	// console.log(target);
+	// renderer.vr.setPoseTarget(camera);
 
 	currentCamera = camera;
 	currentScene = scene;
@@ -44,6 +53,10 @@ const setupRenderer = () => {
 		antialias: true,
 	});
 
+	if (window.location.search.indexOf('web-vr') > -1) {
+		renderer.vr.enabled = true;
+	}
+
 	renderer.shadowMap.enabled = false;
 	renderer.setClearColor(0x0760ef);
 	renderer.setPixelRatio(window.devicePixelRatio);
@@ -60,7 +73,7 @@ const update = (correction) => {
 };
 
 const render = () => {
-	if (window.location.search.indexOf('vr') > -1) {
+	if (window.location.search.indexOf('phone-vr') > -1) {
 		stereoFx.render(currentScene, currentCamera);
 	} else {
 		renderer.render(currentScene, currentCamera);
