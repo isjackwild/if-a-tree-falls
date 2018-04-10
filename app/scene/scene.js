@@ -89,7 +89,7 @@ export const setViewPosition = () => {
 
 	if (window.location.search.indexOf('view=') === -1) {
 		camera.position.y += intersects[0].point.y;
-		controls.target.y += intersects[0].point.y;
+		if (controls.target) controls.target.y += intersects[0].point.y;
 	}
 
 	if (window.location.search.indexOf('web-vr') > -1) {
