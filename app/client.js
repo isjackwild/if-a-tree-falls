@@ -18,8 +18,17 @@ const kickIt = () => {
 	}
 	addEventListeners();
 	onResize();
-	init();
-	document.querySelector('h1').classList.add('loaded');
+
+	new THREE.FBXLoader().load('/assets/sign.fbx', (obj) => {
+		window.app.sign = obj;
+		console.log('loaded sign');
+		init();
+	}, (one, two, three, four) => {
+		// console.log(one, two, three, four);
+	}, (err) => {
+		console.warn(err);
+	});
+	// document.querySelector('h1').classList.add('loaded');
 
 	document.querySelector('.show-notes').addEventListener('click', e => {
 		e.stopPropagation();

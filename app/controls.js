@@ -4,11 +4,16 @@ export let controls;
 
 
 class MouseOrientationControls {
-	constructor(camera, easing = 0.08, thetaMax = Math.PI * 0.25, phiMax = Math.PI * 0.45) {
+	constructor(camera, options) {
+		this.options = options || {};
+		this.options.easing = this.options.easing || 0.11;
+		this.options.thetaMin = this.options.thetaMin || Math.PI * -0.3;
+		this.options.thetaMax = this.options.thetaMax || Math.PI * 0.3;
+		this.options.phiMin = this.options.phiMin || Math.PI * -0.15;
+		this.options.phiMax = this.options.phiMax || Math.PI * 0.48;
+
+
 		this.camera = camera;
-		this.thetaMax = thetaMax;
-		this.phiMax = phiMax;
-		this.easing = easing;
 
 		this.targetRotX = camera.rotation.x;
 		this.targetRotY = camera.rotation.y;
@@ -47,19 +52,32 @@ class MouseOrientationControls {
 		const xMapped = (clientX - (window.innerWidth * 0.5)) / (window.innerWidth * 0.5) * -1;
 		const yMapped = (clientY - (window.innerHeight * 0.5)) / (window.innerHeight * 0.5) * -1;
 
-		this.targetRotX = (yMapped * this.phiMax) + this.initRotX;
-		this.targetRotY = (xMapped * this.thetaMax) + this.initRotY;
+		this.targetRotX = this.constructor.convertToRange(yMapped, [-1, 1], [this.options.phiMin, this.options.phiMax]) + this.initRotX;
+		this.targetRotY = this.constructor.convertToRange(xMapped, [-1, 1], [this.options.thetaMin, this.options.thetaMax]) + this.initRotY;
+
+		// this.targetRotX = (yMapped * this.options.phiMax) + this.initRotX;
+		// this.targetRotY = (xMapped * this.options.thetaMax) + this.initRotY;
 	}
 
 	update() {
-		this.currentRotX += (this.targetRotX - this.currentRotX) * this.easing;
-		this.currentRotY += (this.targetRotY - this.currentRotY) * this.easing;
+		this.currentRotX += (this.targetRotX - this.currentRotX) * this.options.easing;
+		this.currentRotY += (this.targetRotY - this.currentRotY) * this.options.easing;
 
 		this.camera.rotation.x = this.currentRotX;
 		this.camera.rotation.y = this.currentRotY;
 	}
-}
 
+	static convertToRange(value, srcRange, dstRange) {
+		if (value < srcRange[0]) return dstRange[0];
+		if (value > srcRange[1]) return dstRange[1];
+
+		const srcMax = srcRange[1] - srcRange[0];
+		const dstMax = dstRange[1] - dstRange[0];
+		const adjValue = value - srcRange[0];
+
+		return (adjValue * dstMax / srcMax) + dstRange[0];
+	}
+}
 
 export const init = () => {
 	// controls = new THREE.OrbitControls(camera);

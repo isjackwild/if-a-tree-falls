@@ -57,7 +57,7 @@ const setupRenderer = () => {
 		renderer.vr.enabled = true;
 	}
 
-	renderer.shadowMap.enabled = false;
+	renderer.shadowMap.enabled = true;
 	renderer.setClearColor(0x0760ef);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setSize(window.innerWidth, window.innerHeight);

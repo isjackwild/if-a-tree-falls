@@ -29,10 +29,10 @@ import {
 
 export let windStrength = 1;
 let noise;
-const tmpV = new THREE.Vector3(), meshGlobal = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0);
+const tmpV = new THREE.Vector3(), meshGlobal = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0), floorOffsetInterset = new THREE.Vector3();
 const birdTarget = new THREE.Vector3(0, TREE_SEGS * TREE_SEG_HEIGHT * 0.1, 0);
 const birds = [], leaves = [];
-let tree, skybox, leavesInstanced, landscape;
+let tree, skybox, leavesInstanced, landscape, sign;
 let targetHelper;
 let testBird;
 
@@ -78,25 +78,34 @@ export const init = () => {
 
 	meshGlobal.setFromMatrixPosition(scene.matrixWorld);
 
+	sign = window.app.sign;
+	sign.rotation.y = Math.PI * 0.95;
+	sign.rotation.z = Math.PI * 0.033;
+	sign.rotation.x = Math.PI * 0.016;
+	sign.scale.set(0.6, 0.6, 0.6);
+	sign.position.set(390, 400, 250);
+	sign.children[0].position.set(0, 0, 0);
+	sign.children[0].material.lights = false;
+	scene.add(sign);
 
 	console.time('fall');
 };
 
 export const setViewPosition = () => {
+	console.log('set view position');
 	const raycaster = new THREE.Raycaster();
 	raycaster.set(new THREE.Vector3(0, 5000, 0), new THREE.Vector3(0, -1, 0));
 	const intersects = raycaster.intersectObject(landscape.mesh);
-
+	floorOffsetInterset.copy(intersects[0].point);
 	if (window.location.search.indexOf('view=') === -1) {
 		camera.position.y += intersects[0].point.y;
+		sign.position.y += intersects[0].point.y;
 		if (controls.target) controls.target.y += intersects[0].point.y;
 	}
 
 	if (window.location.search.indexOf('web-vr') > -1) {
 		viewPosition.copy(camera.position);
 		scene.position.sub(viewPosition);
-		// console.log(scene.position);
-		// scene.position.set(10, 10, 10);
 		console.log(scene.position);
 	}
 };
