@@ -2,6 +2,8 @@ export const TREE_SEGS = 50;
 export const TREE_SEG_HEIGHT = 200;
 export const TREE_LEAVES_RADIUS = 2000;
 export const WIND_STRENGTH = 0.05;
+// export const TREE_FALL_THRESHOLD = 0.999;
+export const TREE_FALL_THRESHOLD = 0.17;
 
 export const BIRD_TREE_DIST = 2000;
 export const BIRD_COUNT = 12;

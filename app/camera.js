@@ -8,7 +8,8 @@ export const init = () => {
 	// const fov = (window.location.search.indexOf('phone-vr') > -1) ? 120 : 90;
 	const fov = 120;
 	camera = new THREE.PerspectiveCamera(fov, window.app.width / window.app.height, 1, 30000);
-	camera.setFocalLength(25);
+	const fL = window.mobile ? 40 : 25;
+	camera.setFocalLength(fL);
 	if (window.location.search.indexOf('view=top-down') > -1) {
 		camera.position.set(0, TREE_SEG_HEIGHT * TREE_SEGS * 1.2, 1000);
 		camera.lookAt(0, 0, 0);

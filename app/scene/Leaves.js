@@ -234,8 +234,6 @@ const InstancedParticles = () => {
 			data[i + (data.length * 0.5 + 3)] = (Math.random() - 0.5);
 		}
 
-		console.log(data);
-
 		// data[i] = (Math.random() - 0.5) * 100;
 		// data[i + 1] = (Math.random() - 0.5) * 100;
 		// data[i + 2] = (Math.random() - 0.5) * 100;

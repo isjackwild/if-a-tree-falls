@@ -1,0 +1,55 @@
+doctype html
+html(lang="en")
+	head
+		title At Some Point, This Tree Will Fall
+		meta(charset='utf-8')
+		meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+		meta(name='viewport', content='minimal-ui')
+		meta(name="apple-mobile-web-app-capable", content="yes")
+		
+		meta(property="og:type", content="website")
+		meta(property="og:title", content="At Some Point, This Tree Will Fall")
+		meta(property="og:url", content="http://at-some-point-this-tree-will-fall.jack-wild.com")
+		meta(property="og:description", content="Escape information-overload and wait for a non-event. Sure, it might not really happen—but hey—who cares...(?)")
+		meta(property="og:image", content="http://at-some-point-this-tree-will-fall.jack-wild.com/assets/sharing-card.jpg")
+
+		meta(name="twitter:card", content="summary_large_image")
+		meta(name="twitter:creator", content="@isjackwild")
+		meta(name="twitter:title", content="At Some Point, This Tree Will Fall")
+		meta(name="twitter:description", content="Escape information-overload and wait for a non-event. Sure, it might not really happen—but hey—who cares...(?)")
+		meta(name="twitter:image", content="http://at-some-point-this-tree-will-fall.jack-wild.com/assets/sharing-card.jpg")
+		
+		link(href="https://fonts.googleapis.com/css?family=Abel", rel="stylesheet")
+		link(href='css/main.css', rel='stylesheet')
+
+	body
+		canvas.canvas
+
+		span.fps
+		span.show-notes Notes
+		span.mute
+			span.mute__unmute Unmute
+			span.mute__mute Mute
+		section.notes.notes--hidden
+			main.notes__inner
+				div.notes__inner-text
+					p Escape information-overload and wait for a non-event. Sure, it might not <i>really</i> happen—but hey—who cares...(?)
+					p Jack Wild, 2018
+			span.hide-notes Close
+
+
+		script(type='text/javascript').
+			window.treeFallVector = !{treeFallVector};
+			
+		script(src='js/three.min.js')
+		script(src='js/DeviceOrientationControls.js')
+		script(src='js/OrbitControls.js')
+		script(src='js/StereoEffect.js')
+		script(src='js/WebVR.js')
+		script(src='js/ViveController.js')
+		script(src='js/inflate.min.js')
+		script(src='js/FBXLoader.js')
+		script(src='js/curves/NURBSCurve.js')
+		script(src='js/curves/NURBSSurface.js')
+		script(src='js/curves/NURBSUtils.js')
+		script(src='js/main.js')

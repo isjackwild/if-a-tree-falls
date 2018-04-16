@@ -80,16 +80,22 @@ class MouseOrientationControls {
 }
 
 export const init = () => {
-	// controls = new THREE.OrbitControls(camera);
-	// controls.target.set(0, 160, 0);
-	// if (window.location.search.indexOf('view=bottom-up') > -1) {
-	// 	controls.target.set(0, 6000, 0);
-	// } else if (window.location.search.indexOf('view=middle') > -1) {
-	// 	controls.target.set(0, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 0);
-	// } else {
-	// 	controls.target.set(0, 200, 0);
-	// }
-	controls = new MouseOrientationControls(camera);
+	if (window.location.search.indexOf('dev-controls') === -1) {
+		controls = new MouseOrientationControls(camera);
+	} else {
+		console.log('orientation controls');
+		controls = new THREE.OrbitControls(camera);
+		controls.target.set(0, 160, 0);
+		if (window.location.search.indexOf('view=bottom-up') > -1) {
+			controls.target.set(0, 6000, 0);
+		} else if (window.location.search.indexOf('view=middle') > -1) {
+			controls.target.set(0, TREE_SEG_HEIGHT * TREE_SEGS * 0.5, 0);
+		} else {
+			controls.target.set(0, 200, 0);
+		}
+	}
+	
+	
 	window.addEventListener('deviceorientation', setOrientationControls, true);
 };
 

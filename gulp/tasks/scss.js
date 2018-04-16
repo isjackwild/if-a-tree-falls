@@ -7,12 +7,8 @@ const util = require('gulp-util');
 // const cssnano = require('gulp-cssnano');
 
 
-const SCSS_SRC_FILE = '../app/ui/styles/main.scss';
-const SCSS_SRC_FILES = [
-	'../app/ui/components/**/*.scss',
-	'../app/ui/pages/**/*.scss',
-	'../app/ui/styles/**/*.scss',
-];
+const SCSS_SRC_FILE = '../app/main.scss';
+const SCSS_SRC_FILES = ['../app/main.scss'];
 const SCSS_BUILD_FOLDER = '../build/assets/css';
 
 gulp.task('build:scss', function() {

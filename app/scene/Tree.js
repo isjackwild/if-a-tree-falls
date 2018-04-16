@@ -1,11 +1,15 @@
+import 'gsap/TweenMax';
+
 import { TREE_SEGS, TREE_SEG_HEIGHT, WIND_STRENGTH, TREE_LEAVES_COUNT } from '../CONSTANTS';
 import { Noise } from 'noisejs';
 import { convertToRange } from '../lib/maths';
 
 
-const Tree = (initPos = new THREE.Vector3()) => {
+const Tree = (_treeFallVector) => {
 	let mesh, leaves, bones;
+	let treeFallVector = _treeFallVector;
 	const startTime = new Date().getTime();
+
 	const createGeometry = ({ halfHeight, height, segHeight, segCount }) => {
 		const geometry = new THREE.CylinderGeometry(15, 60, height, 8, segCount, true);
 
@@ -144,6 +148,7 @@ const Tree = (initPos = new THREE.Vector3()) => {
 			bumpScale: 2,
 			color: 0x391A21,
 			fog: false,
+			side: treeFallVector ? THREE.DoubleSide : THREE.FrontSide,
 		});
 
 		const treeMesh = new THREE.SkinnedMesh(geometry, material);
@@ -264,22 +269,79 @@ const Tree = (initPos = new THREE.Vector3()) => {
 		return { treeMesh, leavesMesh };
 	};
 
+	const fall = (_treeFallVector) => {
+		treeFallVector = _treeFallVector;
+		const angle = new THREE.Vector3(treeFallVector.x, 0, treeFallVector.z).normalize();
+
+		bones.forEach((b, i) => {
+			if (i === 0) return;
+			const multi = convertToRange(i, [bones.length * 0.33, bones.length], [0, 1]);
+			TweenMax.to(
+				b.rotation,
+				15,
+				{
+					x: angle.x * -0.01 * multi,
+					z: angle.z * -0.01 * multi,
+					delay: i * 0.05,
+					ease: Elastic.easeOut.config(1.7, 0.1),
+				}
+			);
+		});
+
+		TweenMax.to(bones[0].rotation, 3.3, {
+			x: angle.x * Math.PI * 0.487,
+			z: angle.z * Math.PI * 0.487,
+			ease: Back.easeOut.config(1.3),
+		});
+		TweenMax.to(mesh.position, 3.5, { y: mesh.position.y + 55 });
+	};
+
+	const hasFallen = () => {
+		const angle = new THREE.Vector3(treeFallVector.x, 0, treeFallVector.z).normalize();
+		bones.forEach((b, i) => {
+			if (i === 0) return;
+			const multi = convertToRange(i, [bones.length * 0.33, bones.length], [0, 1]);
+			b.rotation.x = angle.x * -0.01 * multi;
+			b.rotation.z = angle.z * -0.01 * multi;
+		});
+		mesh.position.y += 55;
+		bones[0].rotation.x = Math.PI * 0.487;
+		bones[0].rotation.z = Math.PI * 0.487;
+	};
+
+	// const fall = (_treeFallVector) => {
+	// 	console.log('FALL');
+	// 	treeFallVector = _treeFallVector;
+
+	// 	const angle = new THREE.Vector3(treeFallVector.x, 0, treeFallVector.z).normalize();
+	// 	bones.forEach((b, i) => {
+	// 		const multi = convertToRange(i, [0, bones.length * 0.3], [1, 0]);
+
+	// 		b.rotation.x = angle.x * -0.02 * multi;
+	// 		b.rotation.z = angle.y * -0.02 * multi;
+	// 	});
+
+	// 	bones[0].rotation.x = angle.x * Math.PI * 0.4825;
+	// 	bones[0].rotation.z = angle.z * Math.PI * 0.4825;
+
+	// 	mesh.position.y += 30;
+	// };
+
 	const update = (nx, nz, noise) => {
+		if (treeFallVector) return;
+
+		// TODO: Make sure leaves do not appear
 		const secsPast = (Date.now() - startTime) / 1000;
 		leaves.material.uniforms.uTimePassed.value = secsPast;
 
 		bones.forEach((b, i) => {
 			const multi = convertToRange(i, [0, bones.length], [1, 0.25]);
-
 			b.rotation.x = nx * WIND_STRENGTH * multi;
 			b.rotation.z = nz * WIND_STRENGTH * multi;
-
-			if (Math.abs(nx) + Math.abs(nz) > 1.9) {
-				console.log('FALL!!!');
-				console.timeEnd('fall');
-			}
 		});
 	};
+
+
 
 	const height = TREE_SEG_HEIGHT * TREE_SEGS;
 	const halfHeight = height * 0.5;
@@ -298,7 +360,9 @@ const Tree = (initPos = new THREE.Vector3()) => {
 	leaves = meshes.leavesMesh;
 	mesh.position.y = halfHeight;
 
-	return { mesh, bones, update };
+	if (treeFallVector) hasFallen(treeFallVector);
+
+	return { mesh, bones, update, fall };
 };
 
 export default Tree;

@@ -22,12 +22,13 @@ import {
 	BIRD_HEIGHT_VARIATION,
 	WIND_X_SPEED,
 	WIND_Z_SPEED,
+	TREE_FALL_THRESHOLD,
 	BIRD_CIRCLE_SPEED,
 	BIRD_DIVE_SPEED,
 	GRAVITY,
 } from '../CONSTANTS';
 
-export let windStrength = 1;
+export let windStrength = 1, treeFallVector = window.treeFallVector;
 let noise;
 const tmpV = new THREE.Vector3(), meshGlobal = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0), floorOffsetInterset = new THREE.Vector3();
 const birdTarget = new THREE.Vector3(0, TREE_SEGS * TREE_SEG_HEIGHT * 0.1, 0);
@@ -37,7 +38,7 @@ let targetHelper;
 let testBird;
 
 export const init = () => {
-	noise = new Noise(Math.random());
+	noise = new Noise(0.5);
 	scene = new THREE.Scene();
 
 	if (window.location.search.indexOf('no-fog') > -1) {
@@ -66,11 +67,13 @@ export const init = () => {
 		scene.add(bird.mesh);
 	}
 	
-	leavesInstanced = Leaves();
-	leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
-	scene.add(leavesInstanced.mesh);
+	if (!treeFallVector) {
+		leavesInstanced = Leaves();
+		leavesInstanced.mesh.position.y = TREE_SEG_HEIGHT * TREE_SEGS * 0.5;
+		scene.add(leavesInstanced.mesh);
+	}
 
-	tree = Tree();
+	tree = Tree(treeFallVector);
 	scene.add(tree.mesh);
 
 	skybox = Skybox();
@@ -97,9 +100,12 @@ export const setViewPosition = () => {
 	raycaster.set(new THREE.Vector3(0, 5000, 0), new THREE.Vector3(0, -1, 0));
 	const intersects = raycaster.intersectObject(landscape.mesh);
 	floorOffsetInterset.copy(intersects[0].point);
+
+	sign.position.y += (intersects[0].point.y - 15);
+	tree.mesh.position.y += (intersects[0].point.y - 25);
+	
 	if (window.location.search.indexOf('view=') === -1) {
 		camera.position.y += intersects[0].point.y;
-		sign.position.y += intersects[0].point.y;
 		if (controls.target) controls.target.y += intersects[0].point.y;
 	}
 
@@ -109,6 +115,12 @@ export const setViewPosition = () => {
 		console.log(scene.position);
 	}
 };
+
+const treeFalls = (nx, nz) => {
+	treeFallVector = treeFallVector = { x: nx, z: nz };
+	tree.fall(treeFallVector);
+	leavesInstanced.mesh.visible = false;
+}
 
 export const update = (correction) => {
 	// return;
@@ -121,22 +133,31 @@ export const update = (correction) => {
 	let nx = noise.simplex2(100, timeX);
 	let nz = noise.simplex2(0, timeZ);
 
-	// nx = 1;
-	// nz = 1;
-
 	nx *= Easing.Sinusoidal.EaseIn(Math.abs(nx));
 	nz *= Easing.Sinusoidal.EaseIn(Math.abs(nz));
-	// console.log(nx, 2);
-
 	windStrength = Math.abs(nx + nz) * 0.5;
+	console.log(windStrength);
+	if (windStrength > TREE_FALL_THRESHOLD && !treeFallVector) {
+		treeFalls(nx, nz);
+	}
 
-	tree.update(nx, nz, noise);
-	leavesInstanced.update(correction, convertToRange(windStrength, [0, 1], [0.5, 1]));
+
+	if (!treeFallVector) {
+		tree.update(nx, nz, noise);
+		leavesInstanced.update(correction, convertToRange(windStrength, [0, 1], [0.5, 1]));
+	}
+
 
 	tmpV.set(BIRD_TREE_DIST, 0, 0)
 		.applyAxisAngle(up, angle);
+
+	if (treeFallVector) {
+		birdTarget.set(0,5000, 0);
+	} else {
+		birdTarget.setFromMatrixPosition(tree.bones[Math.floor(TREE_SEGS * 0.5)].matrixWorld);
+	}
+
 	birdTarget
-		.setFromMatrixPosition(tree.bones[Math.floor(TREE_SEGS * 0.5)].matrixWorld)
 		.add(meshGlobal)
 		.add(tmpV)
 		.sub({ x: 0, y: Math.sin(height) * BIRD_HEIGHT_VARIATION, z: 0 });

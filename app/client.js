@@ -19,7 +19,8 @@ const kickIt = () => {
 	addEventListeners();
 	onResize();
 
-	new THREE.FBXLoader().load('/assets/sign.fbx', (obj) => {
+	if (window.mobile) document.querySelector('.mute').classList.add('mute--muted');
+	new THREE.FBXLoader().load('/sign.fbx', (obj) => {
 		window.app.sign = obj;
 		console.log('loaded sign');
 		init();

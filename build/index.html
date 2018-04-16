@@ -1,173 +1,26 @@
 <html>
 <head>
-	<title>At Some Point This Tree Will Fall</title>
+	<title>At Some Point, This Tree Will Fall</title>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="minimal-ui">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=0" />
 
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="At Some Point, This Tree Will Fall"/>
+	<meta property="og:url" content="http://at-some-point-this-tree-will-fall.jack-wild.com" />
+	<meta property="og:description" content="Escape information-overload and wait for a non-event. Sure, it might not really happen—but hey—who cares...(?)" />
+	<meta property="og:image" content="http://at-some-point-this-tree-will-fall.jack-wild.com/assets/sharing-card.jpg" />
+
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:creator" content="@isjackwild">
+	<meta name="twitter:title" content="At Some Point, This Tree Will Fall">
+	<meta name="twitter:description" content="Escape information-overload and wait for a non-event. Sure, it might not really happen—but hey—who cares...(?)">
+	<meta name="twitter:image" content="http://at-some-point-this-tree-will-fall.jack-wild.com/assets/sharing-card.jpg">
+
 	<link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
-
-	<style>
-		body, html {
-			padding: 0;
-			margin: 0;
-			width: 100%;
-			height: 100%;
-			overflow: hidden;
-			position: fixed;
-
-			font-family: 'Abel', sans-serif;
-			font-weight: 300;
-			text-transform: uppercase;
-			text-rendering: optimizeLegibility;
-			-webkit-font-smoothing: antialiased;
-			letter-spacing: 0.4em;
-			font-size: 14px;
-			text-shadow: 1px 1px rgba(19, 53, 62, 0.6);
-			text-align: center;
-			color: #ccc;
-		}
-
-		.canvas {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-		}
-
-		h1 {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			font-size: 14px;
-			margin: 0;
-			width: 100%;
-			pointer-events: none;
-			line-height: 1em;
-			margin-top: -4px;
-			-webkit-transition: opacity 30s ease-in;
-			transition: opacity 45s ease-in;
-			font-weight: 300;
-		}
-
-		h1.loaded {
-			opacity: 0;
-		}
-
-		.fps {
-			position: absolute;
-			top: 0;
-			left: 0;
-			font-size: 20px;
-			z-index: 111;
-		}
-
-		.hide-notes {
-			position: absolute;
-			top: 15px;
-			z-index: 2;
-		}
-
-		.notes {
-			position: absolute;
-			top: 0;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			background: red;
-			background: linear-gradient(to bottom, #355156 0%,#e0e2d7 100%);
-			text-align: center;
-			transition: transform 0.3s ease;
-			transform: translateY(0%) translateZ(0);
-			text-shadow: none;
-		}
-
-		.notes--hidden {
-			transform: translateY(100%) translateZ(0);
-		}
-
-		.notes__inner {
-			position: absolute;
-			top: 0;
-			left: 0;
-			bottom: 0;
-			right: 0;
-			overflow: scroll;
-			-webkit-overflow-scrolling: touch;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding-top: 30px;
-		}
-
-		.notes:after {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: calc(100% - 10px);
-			height: 100px;
-			/*background: red;*/
-			content: '';
-			/*background: linear-gradient(to bottom, #c9f0ff 40%, rgba(#c9f0ff, 0) 100%);*/
-		}
-
-		.notes__inner-text {
-			font-size: 18px;
-			letter-spacing: 0.02em;
-			line-height: 1.8em;
-			color: #000;
-			width: 92%;
-			max-width: 600px;
-			margin: auto;
-			padding-top: 120px;
-			padding-bottom: 120px;
-			text-transform: none;
-			/*text-shadow:
-				1px 1px 15px rgba(190, 190, 190, 0.12),
-				1px 1px 1px rgba(190, 190, 190, 0.15);*/
-
-			@media only screen and (max-width: 768px) {
-				padding-bottom: 50px;
-			}
-		}
-
-		.notes__inner p {
-			margin-bottom: 2em;
-			text-align: left;
-		}
-
-		.notes__inner p:last-child {
-			margin-bottom: 0;
-		}
-
-		.show-notes {
-			position: absolute;
-			bottom: 15px;
-			left: 50%;
-		}
-
-		.show-notes, .hide-notes {
-			letter-spacing: 0.2em;
-			transform: translateX(-50%);
-			cursor: pointer;
-			font-size: 14px;
-			user-select: none;
-			text-shadow:
-		       // 3px 3px 0 #333,
-		     -1px -1px 0 #333,  
-		      1px -1px 0 #333,
-		      -1px 1px 0 #333,
-		       1px 1px 0 #333;
-		}
-
-		.show-notes:hover, .hide-notes:hover {
-			color: #fff;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css" />
 </head>
 <body>
 
@@ -175,6 +28,7 @@
 	<span class="fps"></span>
 	<!-- <h1>at some point this tree will fall</h1> -->
 	<span class="show-notes">Notes</span>
+	<span class="mute"><span class="mute__unmute">Unmute</span><span class="mute__mute">Mute</span></span>
 	<section class="notes notes--hidden">
 		<main class="notes__inner">
 			<div class="notes__inner-text">

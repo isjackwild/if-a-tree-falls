@@ -9,18 +9,20 @@
   "scripts": {
     "start": "npm run dev",
     "gulp": "gulp --gulpfile ./gulp/gulpfile.js --env development",
-    "server": "php -S 127.0.0.1:4000 -t build/",
+    "server": "node build/server.js",
     "build": "gulp build --gulpfile ./gulp/gulpfile.js --env production",
     "dev": "npm-run-all --parallel gulp server"
   },
   "dependencies": {
     "color": "^3.0.0",
     "dat-gui": "^0.5.0",
+    "express": "^4.16.3",
     "gsap": "^1.20.2",
     "gulp-util": "^3.0.7",
     "lodash": "^4.13.1",
     "mobile-detect": "^1.4.1",
     "noisejs": "^2.1.0",
+    "path": "^0.12.7",
     "pubsub-js": "^1.5.3",
     "stats-js": "^1.0.0-alpha1",
     "three": "^0.89.0",
