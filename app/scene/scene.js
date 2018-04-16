@@ -90,12 +90,9 @@ export const init = () => {
 	sign.children[0].position.set(0, 0, 0);
 	sign.children[0].material.lights = false;
 	scene.add(sign);
-
-	console.time('fall');
 };
 
 export const setViewPosition = () => {
-	console.log('set view position');
 	const raycaster = new THREE.Raycaster();
 	raycaster.set(new THREE.Vector3(0, 5000, 0), new THREE.Vector3(0, -1, 0));
 	const intersects = raycaster.intersectObject(landscape.mesh);
@@ -112,7 +109,6 @@ export const setViewPosition = () => {
 	if (window.location.search.indexOf('web-vr') > -1) {
 		viewPosition.copy(camera.position);
 		scene.position.sub(viewPosition);
-		console.log(scene.position);
 	}
 };
 
@@ -136,7 +132,6 @@ export const update = (correction) => {
 	nx *= Easing.Sinusoidal.EaseIn(Math.abs(nx));
 	nz *= Easing.Sinusoidal.EaseIn(Math.abs(nz));
 	windStrength = Math.abs(nx + nz) * 0.5;
-	console.log(windStrength);
 	if (windStrength > TREE_FALL_THRESHOLD && !treeFallVector) {
 		treeFalls(nx, nz);
 	}

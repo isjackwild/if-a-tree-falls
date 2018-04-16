@@ -309,24 +309,6 @@ const Tree = (_treeFallVector) => {
 		bones[0].rotation.z = Math.PI * 0.487;
 	};
 
-	// const fall = (_treeFallVector) => {
-	// 	console.log('FALL');
-	// 	treeFallVector = _treeFallVector;
-
-	// 	const angle = new THREE.Vector3(treeFallVector.x, 0, treeFallVector.z).normalize();
-	// 	bones.forEach((b, i) => {
-	// 		const multi = convertToRange(i, [0, bones.length * 0.3], [1, 0]);
-
-	// 		b.rotation.x = angle.x * -0.02 * multi;
-	// 		b.rotation.z = angle.y * -0.02 * multi;
-	// 	});
-
-	// 	bones[0].rotation.x = angle.x * Math.PI * 0.4825;
-	// 	bones[0].rotation.z = angle.z * Math.PI * 0.4825;
-
-	// 	mesh.position.y += 30;
-	// };
-
 	const update = (nx, nz, noise) => {
 		if (treeFallVector) return;
 
@@ -340,7 +322,6 @@ const Tree = (_treeFallVector) => {
 			b.rotation.z = nz * WIND_STRENGTH * multi;
 		});
 	};
-
 
 
 	const height = TREE_SEG_HEIGHT * TREE_SEGS;
