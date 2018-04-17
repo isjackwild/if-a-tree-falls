@@ -50,7 +50,7 @@ export const init = () => {
 	gain.connect(mainGain);
 
 	const loader = new THREE.AudioLoader();
-	loader.load('assets/wind--01.mp3', onLoadAudio);
+	loader.load('wind--01.mp3', onLoadAudio);
 	document.querySelector('.mute').addEventListener('click', toggleMute);
 };
 

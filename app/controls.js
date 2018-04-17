@@ -1,7 +1,7 @@
 import { camera } from './camera.js';
 import { TREE_SEGS, TREE_SEG_HEIGHT } from './controls';
 export let controls;
-
+let areInstructionsShown = false;
 
 class MouseOrientationControls {
 	constructor(camera, options) {
@@ -99,8 +99,28 @@ export const init = () => {
 	window.addEventListener('deviceorientation', setOrientationControls, true);
 };
 
+const LOOK_DOWN_THRESHOLD = 33;
+const onOrientation = ({ alpha, beta, gamma }) => {
+	console.log('orientation');
+	if (Math.abs(beta) <= LOOK_DOWN_THRESHOLD && Math.abs(gamma) <= LOOK_DOWN_THRESHOLD && !areInstructionsShown) {
+		areInstructionsShown = true;
+		document.querySelector('.instructions').classList.remove('instructions--hidden');
+		console.log('show instructions');
+		return;
+	}
+
+	if (Math.abs(beta) > LOOK_DOWN_THRESHOLD &&  Math.abs(gamma) > LOOK_DOWN_THRESHOLD && areInstructionsShown) {
+		areInstructionsShown = false;
+		console.log('hide instructions');
+		document.querySelector('.instructions').classList.add('instructions--hidden');
+		return;
+	}
+}
+
 const setOrientationControls = (e) => {
 	window.removeEventListener('deviceorientation', setOrientationControls, true);
+	window.addEventListener('deviceorientation', onOrientation, true);
+	document.querySelector('.instructions').classList.remove('instructions--hidden');
 	if (!e.alpha) return;
 	controls = new THREE.DeviceOrientationControls(camera, true);
 	controls.connect();

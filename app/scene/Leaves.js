@@ -275,7 +275,7 @@ const InstancedParticles = () => {
 		const copyShader = new GPGPU.CopyShader();
 
 		gpgpu.pass(copyShader.setTexture(originsTexture).material, renderTarget1);
-		const perlinTexture = new THREE.TextureLoader().load('/assets/maps/perlin-512.png');
+		const perlinTexture = new THREE.TextureLoader().load('/maps/perlin-512.png');
 		perlinTexture.minFilter = perlinTexture.magFilter = THREE.NearestFilter;
 
 		return { renderTarget1, renderTarget2, originsTexture, perlinTexture };
