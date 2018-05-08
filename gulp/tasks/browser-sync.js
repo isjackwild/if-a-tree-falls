@@ -10,7 +10,7 @@ gulp.task('server', function() {
 		online: false,
 		logConnections: true,
 		files: [ PUBLIC_FOLDER ],
-		proxy: '127.0.0.1:4000',
+		proxy: '127.0.0.1:4001',
 	});
 
 	browserSync.reload();

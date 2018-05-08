@@ -35,7 +35,7 @@ const animate = () => {
 };
 
 const app = express();
-const port = Number(process.env.PORT || 4000);
+const port = Number(process.env.PORT || 4001);
 
 app.set('views', __dirname);
 app.set('view engine', 'jade');

@@ -1,3 +1,5 @@
+const dat = require('dat-gui');
+
 import { Noise } from 'noisejs';
 export let scene, boxMesh;
 import { camera, viewPosition } from '../camera';

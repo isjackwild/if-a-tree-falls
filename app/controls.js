@@ -24,7 +24,6 @@ class MouseOrientationControls {
 		this.initRotX = camera.rotation.x;
 		this.initRotY = camera.rotation.y;
 		
-		console.log(this.camera);
 		this.camera.rotation.order = 'YXZ';
 
 		this.onMouseMove = this.onMouseMove.bind(this);
@@ -54,9 +53,6 @@ class MouseOrientationControls {
 
 		this.targetRotX = this.constructor.convertToRange(yMapped, [-1, 1], [this.options.phiMin, this.options.phiMax]) + this.initRotX;
 		this.targetRotY = this.constructor.convertToRange(xMapped, [-1, 1], [this.options.thetaMin, this.options.thetaMax]) + this.initRotY;
-
-		// this.targetRotX = (yMapped * this.options.phiMax) + this.initRotX;
-		// this.targetRotY = (xMapped * this.options.thetaMax) + this.initRotY;
 	}
 
 	update() {
@@ -99,9 +95,8 @@ export const init = () => {
 	window.addEventListener('deviceorientation', setOrientationControls, true);
 };
 
-const LOOK_DOWN_THRESHOLD = 33;
+const LOOK_DOWN_THRESHOLD = 22;
 const onOrientation = ({ alpha, beta, gamma }) => {
-	console.log('orientation');
 	if (Math.abs(beta) <= LOOK_DOWN_THRESHOLD && Math.abs(gamma) <= LOOK_DOWN_THRESHOLD && !areInstructionsShown) {
 		areInstructionsShown = true;
 		document.querySelector('.instructions').classList.remove('instructions--hidden');
@@ -121,6 +116,7 @@ const setOrientationControls = (e) => {
 	window.removeEventListener('deviceorientation', setOrientationControls, true);
 	window.addEventListener('deviceorientation', onOrientation, true);
 	document.querySelector('.instructions').classList.remove('instructions--hidden');
+	window.addEventListener('touchmove', e => e.preventDefault());
 	if (!e.alpha) return;
 	controls = new THREE.DeviceOrientationControls(camera, true);
 	controls.connect();

@@ -6,7 +6,7 @@ html(lang="en")
 		meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
 		meta(name='viewport', content='minimal-ui')
 		meta(name="apple-mobile-web-app-capable", content="yes")
-		meta(name="viewport", content="initial-scale=1.0,width=device-width,user-scalable=0")
+		meta(name="viewport", content="initial-scale=1.0,width=device-width,user-scalable=no")
 		
 		meta(property="og:type", content="website")
 		meta(property="og:title", content="At Some Point, This Tree Will Fall")
@@ -22,6 +22,15 @@ html(lang="en")
 		
 		link(href="https://fonts.googleapis.com/css?family=Abel", rel="stylesheet")
 		link(href='css/main.css', rel='stylesheet')
+
+
+		script(async, src="https://www.googletagmanager.com/gtag/js?id=UA-43611103-10")
+		script(type='text/javascript').
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'UA-43611103-10');
 
 	body
 		canvas.canvas

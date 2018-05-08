@@ -6,7 +6,7 @@ export let viewPosition = new THREE.Vector3();
 
 export const init = () => {
 	// const fov = (window.location.search.indexOf('phone-vr') > -1) ? 120 : 90;
-	const fov = 120;
+	const fov = 45;
 	camera = new THREE.PerspectiveCamera(fov, window.app.width / window.app.height, 1, 30000);
 	const fL = window.mobile ? 40 : 25;
 	camera.setFocalLength(fL);
