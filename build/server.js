@@ -1,7 +1,10 @@
 // NPM
 const express = require('express');
 const path = require('path');
+const http = require('http');
 const Noise = require('noisejs').Noise;
+const MobileDetect = require('mobile-detect');
+const { initWebsockets } = require('./websockets');
 
 const WIND_X_SPEED = 0.00003;
 const WIND_Z_SPEED = 0.0001;
@@ -35,17 +38,26 @@ const animate = () => {
 };
 
 const app = express();
+const server = http.createServer(app);
 const port = Number(process.env.PORT || 4001);
 
 app.set('views', __dirname);
 app.set('view engine', 'jade');
 app.use(express.static(__dirname + '/assets'));
 app.get('/', (req, res) => {
+	const md = new MobileDetect(req.headers['user-agent']);
+	if (md.mobile())
+		return res.render('mobile');
 	return res.render('index', { treeFallVector });
 	// app.use(express['static'](path.join(__dirname, '')));
 	// return res.sendFile(__dirname + '/index.html');
 });
 
-app.listen(port, () => console.log(`listening on ${port}`));
+server.listen(port, () => {
+	console.log(`listening on ${port}`);
+	initWebsockets(server);
+});
+
+
 animate();
 

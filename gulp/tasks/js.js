@@ -47,6 +47,40 @@ gulp.task('build:js', function() {
 	}
 });
 
-gulp.task('watch:js', ['build:js'], function() {
-	gulp.watch(JS_SRC_FILES, ['build:js']);
+gulp.task('build:mob-js', function() {
+	if (util.env.env === 'production') {
+		return browserify('../app/mobile.js')
+			.transform('babelify')
+			.transform('envify', {
+				global: true,
+				_: 'purge',
+				NODE_ENV: 'production'
+			})
+			.bundle()
+			.on('error', function (err) {
+				console.log(err.toString());
+				this.emit("end");
+			})
+			.pipe(source('mobile.js'))
+			.pipe(buffer())
+			.pipe(uglify())
+			.pipe(gulp.dest(JS_BUILD_FOLDER));	
+	} else {
+		return browserify({
+				entries: [ '../app/mobile.js' ],
+				debug: true,
+			})
+			.transform('babelify')
+			.bundle()
+			.on('error', function (err) {
+				console.log(err.toString());
+				this.emit("end");
+			})
+			.pipe(source('mobile.js'))
+			.pipe(gulp.dest(JS_BUILD_FOLDER));
+	}
+});
+
+gulp.task('watch:js', ['build:js', 'build:mob-js'], function() {
+	gulp.watch(JS_SRC_FILES, ['build:js', 'build:mob-js']);
 });

@@ -9,7 +9,7 @@
   "scripts": {
     "start": "npm run dev",
     "gulp": "gulp --gulpfile ./gulp/gulpfile.js --env development",
-    "server": "node build/server.js",
+    "server": "nodemon build/server.js",
     "build": "gulp build --gulpfile ./gulp/gulpfile.js --env production",
     "dev": "npm-run-all --parallel gulp server"
   },

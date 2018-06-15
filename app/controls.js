@@ -1,3 +1,4 @@
+import io from 'socket.io-client';
 import { camera } from './camera.js';
 import { TREE_SEGS, TREE_SEG_HEIGHT } from './controls';
 export let controls;
@@ -27,6 +28,7 @@ class MouseOrientationControls {
 		this.camera.rotation.order = 'YXZ';
 
 		this.onMouseMove = this.onMouseMove.bind(this);
+		this.onSocketTouchMove = this.onSocketTouchMove.bind(this);
 		this.hasMouseMovedThisAnimFrame = false;
 		this.addEventListeners();
 	}
@@ -36,10 +38,12 @@ class MouseOrientationControls {
 	}
 
 	addEventListeners() {
+		window.socket.on('touchmove.server', this.onSocketTouchMove);
 		window.addEventListener('mousemove', this.onMouseMove);
 	}
 
 	removeEventListeners() {
+		window.socket.off('touchmove.server', this.onSocketTouchMove);
 		window.removeEventListener('mousemove', this.onMouseMove);
 	}
 
@@ -53,6 +57,15 @@ class MouseOrientationControls {
 
 		this.targetRotX = this.constructor.convertToRange(yMapped, [-1, 1], [this.options.phiMin, this.options.phiMax]) + this.initRotX;
 		this.targetRotY = this.constructor.convertToRange(xMapped, [-1, 1], [this.options.thetaMin, this.options.thetaMax]) + this.initRotY;
+	}
+
+	onSocketTouchMove({ x, y }) {
+		const e = {
+			clientX: x * window.innerWidth,
+			clientY: y * window.innerHeight,
+		}
+
+		this.onMouseMove(e);
 	}
 
 	update() {
@@ -77,6 +90,7 @@ class MouseOrientationControls {
 
 export const init = () => {
 	if (window.location.search.indexOf('dev-controls') === -1) {
+		window.socket = io();
 		controls = new MouseOrientationControls(camera);
 	} else {
 		console.log('orientation controls');

@@ -142,6 +142,7 @@ h1.loaded {
 	left: 50%;
 	transform: translateX(-50%);
 	cursor: pointer;
+	display: none;
 }
 
 .mute__unmute {
@@ -160,6 +161,7 @@ h1.loaded {
 	position: absolute;
 	bottom: 15px;
 	left: 50%;
+	display: none;
 }
 
 .show-notes, .hide-notes, .mute, .instructions {
