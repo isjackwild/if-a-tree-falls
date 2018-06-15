@@ -52,6 +52,12 @@ export const init = () => {
 	const loader = new THREE.AudioLoader();
 	loader.load('wind--01.mp3', onLoadAudio);
 	document.querySelector('.mute').addEventListener('click', toggleMute);
+
+	if (audioContext.state === 'suspended') {
+		document.body.addEventListener('click', () => {
+			audioContext.resume().then(() => console.log('audio playback resumed'));
+		});
+	}
 };
 
 export const update = (correction) => {
